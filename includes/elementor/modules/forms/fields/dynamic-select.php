@@ -178,14 +178,14 @@ class Dynamic_Select extends Field_Base {
 		$field_controls = [
 			'data_source' => [
 				'name' => 'data_source',
-				'label' => __( 'Data Source', 'wpup-elementor' ),
+				'label' => __( 'Data Source', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'acf_repeater_post' => __( 'ACF Repeater Post', 'wpup-elementor' ),
-					'acf_repeater_options' => __( 'ACF Repeater Options', 'wpup-elementor' ),
-					'post_meta' => __( 'Post Meta', 'wpup-elementor' ),
-					'option' => __( 'Site Option', 'wpup-elementor' ),
-					'function' => __( 'Custom function', 'wpup-elementor' ),
+					'acf_repeater_post' => __( 'ACF Repeater Post', 'msshext' ),
+					'acf_repeater_options' => __( 'ACF Repeater Options', 'msshext' ),
+					'post_meta' => __( 'Post Meta', 'msshext' ),
+					'option' => __( 'Site Option', 'msshext' ),
+					'function' => __( 'Custom function', 'msshext' ),
 				],
 				'condition' => [
 					'field_type' => $this->get_type(),
@@ -193,12 +193,12 @@ class Dynamic_Select extends Field_Base {
 				'tab' => 'content',
 				'inner_tab' => 'form_fields_content_tab',
 				'tabs_wrapper' => 'form_fields_tabs',
-				'description' => __( 'If the data is pulled from a text field, enter each option in a separate line. To differentiate between label and value, separate them with a pipe char ("|"). For example: First Name|f_name', 'wpup-elementor' ),
+				'description' => __( 'If the data is pulled from a text field, enter each option in a separate line. To differentiate between label and value, separate them with a pipe char ("|"). For example: First Name|f_name', 'msshext' ),
 			],
 
 			'first_option' => [
 				'name' => 'first_option',
-				'label' => __( 'First Option', 'wpup-elementor' ),
+				'label' => __( 'First Option', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'field_type' => $this->get_type(),
@@ -210,7 +210,7 @@ class Dynamic_Select extends Field_Base {
 
 			'data_key' => [
 				'name' => 'data_key',
-				'label' => __( 'Data Key', 'wpup-elementor' ),
+				'label' => __( 'Data Key', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'field_type' => $this->get_type(),
@@ -223,7 +223,7 @@ class Dynamic_Select extends Field_Base {
 
 			'repeater_col_1' => [
 				'name' => 'repeater_col_1',
-				'label' => __( 'Repeater Col 1 (Option Label)', 'wpup-elementor' ),
+				'label' => __( 'Repeater Col 1 (Option Label)', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'field_type' => $this->get_type(),
@@ -232,12 +232,12 @@ class Dynamic_Select extends Field_Base {
 				'tab' => 'content',
 				'inner_tab' => 'form_fields_content_tab',
 				'tabs_wrapper' => 'form_fields_tabs',
-				'description' => __( 'Enter the key used in repeater. The values from repeater will be used as option Value and also as option Label if Repeater Col 2 is not set.', 'wpup-elementor' ),
+				'description' => __( 'Enter the key used in repeater. The values from repeater will be used as option Value and also as option Label if Repeater Col 2 is not set.', 'msshext' ),
 			],
 
 			'repeater_col_2' => [
 				'name' => 'repeater_col_2',
-				'label' => __( 'Repeater Col 2 (Option Key)', 'wpup-elementor' ),
+				'label' => __( 'Repeater Col 2 (Option Key)', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'field_type' => $this->get_type(),
@@ -246,12 +246,12 @@ class Dynamic_Select extends Field_Base {
 				'tab' => 'content',
 				'inner_tab' => 'form_fields_content_tab',
 				'tabs_wrapper' => 'form_fields_tabs',
-				'description' => __( 'Enter the key used in repeater. The values from repeater will be used as option Label.', 'wpup-elementor' ),
+				'description' => __( 'Enter the key used in repeater. The values from repeater will be used as option Label.', 'msshext' ),
 			],
 
 			'function_name' => [
 				'name' => 'function_name',
-				'label' => __( 'Function Name', 'wpup-elementor' ),
+				'label' => __( 'Function Name', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'field_type' => $this->get_type(),

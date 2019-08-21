@@ -162,10 +162,10 @@ class Plugin {
 		 *
 		 * @param array $locale_settings Localized settings.
 		 */
-		/*$locale_settings = apply_filters( 'WPUP_ELEMENTOR/frontend/localize_settings', $locale_settings );
+		/*$locale_settings = apply_filters( 'msshext/frontend/localize_settings', $locale_settings );
 
 		if ( !empty( $locale_settings ) )
-			wp_localize_script( 'msshext-frontend', 'WpUpElementorConfig', $locale_settings );*/
+			wp_localize_script( 'msshext-frontend', 'MsshextElementorConfig', $locale_settings );*/
 	}
 
 	public function register_frontend_scripts() {
@@ -194,14 +194,14 @@ class Plugin {
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'WPUP_ELEMENTOR/init' );
+		do_action( 'msshext/init' );
 	}
 
 	/**
 	 * @param \Elementor\Core\Base\Document $document
 	 */
 	public function on_document_save_version( $document ) {
-		$document->update_meta( '_wpup_elementor_version', MSSHEXT_VERSION );
+		$document->update_meta( '_msshext_version', MSSHEXT_VERSION );
 	}
 
 	private function setup_hooks() {

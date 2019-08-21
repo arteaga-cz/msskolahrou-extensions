@@ -96,7 +96,7 @@ class Admin {
 		$elements_manager->add_category(
 			'msshext',
 			[
-				'title' => __( 'WP PowerUP', 'msshext' ),
+				'title' => __( 'MŠ Škola Hrou', 'msshext' ),
 				'icon' => 'font',
 			],
 			1

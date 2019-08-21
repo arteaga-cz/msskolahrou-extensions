@@ -139,7 +139,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label' => esc_html__( 'Items to load', 'wpupee' ),
+				'label' => esc_html__( 'Items to load', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'label_block' => false,
 				'default' => -1,
@@ -150,7 +150,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'items_to_show',
 			[
-				'label' => esc_html__( 'Items to show', 'wpupee' ),
+				'label' => esc_html__( 'Items to show', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'label_block' => false,
 				'default' => 2,
@@ -184,27 +184,6 @@ class Events extends Widget_Base {
 				'default' => '',
 			]
 		);
-
-		/*$this->add_responsive_control(
-			'columns',
-			[
-				'label' => __( 'Columns', 'wpupee' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => '1',
-				'tablet_default' => '1',
-				'mobile_default' => '1',
-				'options' => [
-					'1' => '1',
-					'2' => '2',
-					'3' => '3',
-					'4' => '4',
-					'5' => '5',
-					'6' => '6',
-				],
-				'prefix_class' => 'elementor-grid%s-',
-				'frontend_available' => true,
-			]
-		);*/
 
 		$this->add_control(
 			'date_format',
@@ -397,6 +376,13 @@ class Events extends Widget_Base {
 		);
 
 		$this->add_control(
+			'hr_4',
+			[
+				'type' => Controls_Manager::DIVIDER,
+			]
+		);
+
+		$this->add_control(
 			'terms',
 			[
 				'label' => __( 'Category' ),
@@ -436,6 +422,22 @@ class Events extends Widget_Base {
 					'future' => __( 'Future', 'msshext' ),
 					'past' => __( 'Past', 'msshext' ),
 				],
+			]
+		);
+
+		$this->add_control(
+			'hr_5',
+			[
+				'type' => Controls_Manager::DIVIDER,
+			]
+		);
+
+		$this->add_control(
+			'no_posts_message',
+			[
+				'label' => __( 'No posts found message', 'msshext' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => __( 'Zatím žádné události.'),
 			]
 		);
 
@@ -1139,14 +1141,11 @@ class Events extends Widget_Base {
 
 		$posts = get_posts( $args );
 
-		if ( empty( $posts ) ) {
-			return;
-		}
-
 		$month = '';
 		$counter = 0;
 		$show_button = false;
 		$this->render_loop_header();
+
 		foreach ( $posts as $post ) {
 			setup_postdata( $post );
 
@@ -1166,6 +1165,11 @@ class Events extends Widget_Base {
 			$this->render_post();
 			$counter++;
 		}
+		error_log( '$posts: ' . print_r( $posts, true ) );
+		if ( empty( $posts ) ) {
+			$this->render_no_posts_message();
+		}
+
 		$this->render_loop_footer( $show_button );
 
 		wp_reset_postdata();
@@ -1249,6 +1253,12 @@ class Events extends Widget_Base {
 			</div>
 			<div class="msshext-events-hidden">
 		<?php
+	}
+
+	protected function render_no_posts_message() {
+		$settings = $this->get_settings_for_display();
+		$this->add_render_attribute( 'no_posts_message', 'class', 'msshext-no-posts-message' );
+		echo $html.= sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
 	}
 
 	/**
