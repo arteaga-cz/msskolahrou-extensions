@@ -267,13 +267,6 @@ class Events extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'hr_2',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-
 		$this->add_responsive_control(
 			'_desc_col_inline_size',
 			[
@@ -303,7 +296,7 @@ class Events extends Widget_Base {
 		);
 
 		$this->add_control(
-			'hr_3',
+			'hr_2',
 			[
 				'type' => Controls_Manager::DIVIDER,
 			]
@@ -337,6 +330,65 @@ class Events extends Widget_Base {
 				'default' => 'h ',
 				'condition' => [
 					'group_by_month' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'hr_3',
+			[
+				'type' => Controls_Manager::DIVIDER,
+			]
+		);
+
+		$this->add_control(
+			'readmore_text',
+			[
+				'label' => __( 'Read More link text', 'msshext' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => __( 'Více informací'),
+			]
+		);
+
+		$this->add_control(
+			'readmore_selected_icon',
+			[
+				'label' => __( 'Read More Icon', 'elementor' ),
+				'type' => Controls_Manager::ICONS,
+				'label_block' => true,
+				'fa4compatibility' => 'icon',
+			]
+		);
+
+		$this->add_control(
+			'readmore_icon_align',
+			[
+				'label' => __( 'Read More Icon Position', 'elementor' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'left',
+				'options' => [
+					'left' => __( 'Before', 'elementor' ),
+					'right' => __( 'After', 'elementor' ),
+				],
+				'condition' => [
+					'readmore_selected_icon[value]!' => '',
+				],
+			]
+		);
+
+		$this->add_control(
+			'readmore_icon_indent',
+			[
+				'label' => __( 'Icon Spacing', 'elementor' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'max' => 50,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-button .elementor-align-icon-left' => 'margin-right: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -660,7 +712,7 @@ class Events extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .msshext-event-timing' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-event-title' => 'color: {{VALUE}};',
 				],
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -673,7 +725,7 @@ class Events extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'title_typography',
-				'selector' => '{{WRAPPER}} .msshext-event-timing',
+				'selector' => '{{WRAPPER}} .msshext-event-title',
 				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
 			]
 		);
@@ -684,7 +736,7 @@ class Events extends Widget_Base {
 				'label' => __( 'Margin', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'selectors' => [
-					'{{WRAPPER}} .msshext-event-timing' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .msshext-event-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -706,7 +758,7 @@ class Events extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .msshext-event-desc .msshext-event-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-event-desc .msshext-event-excerpt' => 'color: {{VALUE}};',
 				],
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -738,7 +790,80 @@ class Events extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'section_style',
+			'section_readmore_style',
+			[
+				'label' => __( 'Read More', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'readmore_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} a.msshext-event-readmore, {{WRAPPER}} .msshext-event-readmore',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'readmore_text_shadow',
+				'selector' => '{{WRAPPER}} a.msshext-event-readmore, {{WRAPPER}} .msshext-event-readmore',
+			]
+		);
+
+		$this->start_controls_tabs( 'tabs_readmore_style' );
+
+		$this->start_controls_tab(
+			'tab_readmore_normal',
+			[
+				'label' => __( 'Normal', 'elementor' ),
+			]
+		);
+
+		$this->add_control(
+			'readmore_text_color',
+			[
+				'label' => __( 'Text Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} a.msshext-event-readmore, {{WRAPPER}} .msshext-event-readmore' => 'fill: {{VALUE}}; color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_readmore_hover',
+			[
+				'label' => __( 'Hover', 'elementor' ),
+			]
+		);
+
+		$this->add_control(
+			'readmore_hover_color',
+			[
+				'label' => __( 'Text Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} a.msshext-event-readmore:hover, {{WRAPPER}} .msshext-event-readmore:hover, {{WRAPPER}} a.msshext-event-readmore:focus, {{WRAPPER}} .msshext-event-readmore:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} a.msshext-event-readmore:hover svg, {{WRAPPER}} .msshext-event-readmore:hover svg, {{WRAPPER}} a.msshext-event-readmore:focus svg, {{WRAPPER}} .msshext-event-readmore:focus svg' => 'fill: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_button_style',
 			[
 				'label' => __( 'Button', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
@@ -947,13 +1072,13 @@ class Events extends Widget_Base {
 		}
 
 		$month = '';
-		$counter = 1;
+		$counter = 0;
 		$show_button = false;
 		$this->render_loop_header();
 		foreach ( $posts as $post ) {
 			setup_postdata( $post );
 
-			if ( $counter > $settings['items_to_show'] ) {
+			if ( $counter == $settings['items_to_show'] ) {
 				$show_button = true;
 				$this->render_loop_separator();
 			}
@@ -1000,10 +1125,10 @@ class Events extends Widget_Base {
 			$permalink = get_the_permalink();
 
 		$this->add_render_attribute( 'title_text', 'class', 'elementor-event-title msshext-event-title' );
-		$this->add_inline_editing_attributes( 'title_text', 'none' );
+		//$this->add_inline_editing_attributes( 'title_text', 'none' );
 
 		$this->add_render_attribute( 'excerpt', 'class', 'elementor-event-excerpt msshext-event-excerpt' );
-		$this->add_inline_editing_attributes( 'excerpt', 'none' );
+		//$this->add_inline_editing_attributes( 'excerpt', 'none' );
 
 		$html = '<div class="elementor-event-wrapper msshext-event-wrapper">' . PHP_EOL;
 
@@ -1020,7 +1145,8 @@ class Events extends Widget_Base {
 		$html.= sprintf( '<p %s>%s</p>', $this->get_render_attribute_string( 'excerpt' ), get_the_excerpt() );
 
 		if ( $permalink )
-			$html .= '<a href="'.$permalink.'">' . __( 'Zobrazit více', 'msshext' ) . '</a>';
+			//$html .= '<a href="'.$permalink.'">' . __( 'Zobrazit více', 'msshext' ) . '</a>';
+			$html .= $this->get_readmore( $permalink );
 
 		$html.= '</div>'; //End .msshext-event-desc
 
@@ -1101,6 +1227,7 @@ class Events extends Widget_Base {
 		}
 
 		$this->add_render_attribute( 'button', 'class', 'elementor-button' );
+		$this->add_render_attribute( 'button', 'class', 'msshext-events-show-all' );
 		$this->add_render_attribute( 'button', 'role', 'button' );
 
 		if ( ! empty( $settings['button_css_id'] ) ) {
@@ -1160,7 +1287,7 @@ class Events extends Widget_Base {
 			],
 		] );
 
-		$this->add_inline_editing_attributes( 'text', 'none' );
+		//$this->add_inline_editing_attributes( 'text', 'none' );
 				?>
 				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
 					<?php if ( ! empty( $settings['button_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
@@ -1173,6 +1300,92 @@ class Events extends Widget_Base {
 					</span>
 					<?php endif; ?>
 					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['button_text']; ?></span>
+				</span>
+				<?php
+	}
+
+	/**
+	 * Render readmore output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function get_readmore( $href = '#' ) {
+		$settings = $this->get_settings_for_display();
+
+		$this->add_render_attribute( 'readmore_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
+
+		if ( ! empty( $href ) ) {
+			$this->add_render_attribute( 'readmore', 'href', $href );
+			$this->add_render_attribute( 'readmore', 'class', 'elementor-button-link' );
+		}
+
+		$this->add_render_attribute( 'readmore', 'class', 'elementor-button' );
+		$this->add_render_attribute( 'readmore', 'class', 'msshext-event-readmore' );
+		$this->add_render_attribute( 'readmore', 'role', 'button' );
+
+		ob_start();
+
+				?>
+				<div <?php echo $this->get_render_attribute_string( 'readmore_wrapper' ); ?>>
+					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?>>
+						<?php $this->render_readmore_text(); ?>
+					</a>
+				</div>
+				<?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render readmore text.
+	 *
+	 * @since 1.5.0
+	 * @access protected
+	 */
+	protected function render_readmore_text() {
+		$settings = $this->get_settings_for_display();
+
+		$migrated = isset( $settings['__fa4_migrated']['readmore_selected_icon'] );
+		$is_new = empty( $settings['readmore_icon'] ) && Icons_Manager::is_migration_allowed();
+
+		if ( ! $is_new && empty( $settings['readmore_icon_align'] ) ) {
+			// @todo: remove when deprecated
+			// added as bc in 2.6
+			//old default
+			$settings['readmore_icon_align'] = $this->get_settings( 'readmore_icon_align' );
+		}
+
+		$this->add_render_attribute( [
+			'content-wrapper' => [
+				'class' => 'elementor-button-content-wrapper',
+			],
+			'icon-align' => [
+				'class' => [
+					'elementor-button-icon',
+					'elementor-align-icon-' . $settings['readmore_icon_align'],
+				],
+			],
+			'text' => [
+				'class' => 'elementor-button-text',
+			],
+		] );
+
+		//$this->add_inline_editing_attributes( 'text', 'none' );
+				?>
+				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
+					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
+					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+						<?php if ( $is_new || $migrated ) :
+		Icons_Manager::render_icon( $settings['readmore_selected_icon'], [ 'aria-hidden' => 'true' ] );
+		else : ?>
+						<i class="<?php echo esc_attr( $settings['readmore_icon'] ); ?>" aria-hidden="true"></i>
+						<?php endif; ?>
+					</span>
+					<?php endif; ?>
+					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['readmore_text']; ?></span>
 				</span>
 				<?php
 	}

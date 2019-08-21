@@ -135,9 +135,10 @@ class Plugin {
 	}
 
 	public function enqueue_frontend_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		//$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = '';
 
-		/*wp_enqueue_script(
+		wp_enqueue_script(
 			'msshext-frontend',
 			MSSHEXT_URL . 'assets/js/frontend' . $suffix . '.js',
 			[
@@ -147,7 +148,7 @@ class Plugin {
 			true
 		);
 
-		$locale_settings = [
+		/*$locale_settings = [
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce' => wp_create_nonce( 'msshext-frontend' ),
 		];*/
