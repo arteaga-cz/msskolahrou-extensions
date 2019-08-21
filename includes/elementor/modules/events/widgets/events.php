@@ -12,8 +12,8 @@ use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
-use ElementorPro\Modules\QueryControl\Module as Module_Query;
-use ElementorPro\Modules\QueryControl\Controls\Group_Control_Related;
+//use ElementorPro\Modules\QueryControl\Module as Module_Query;
+//use ElementorPro\Modules\QueryControl\Controls\Group_Control_Related;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -100,13 +100,16 @@ class Events extends Widget_Base {
 		return [ 'msshext' ];
 	}
 
-	protected function get_taxonomies() {
-		$taxonomies = get_taxonomies( [ 'show_in_nav_menus' => true ], 'objects' );
+	protected function get_terms() {
+		$terms = get_terms( [
+			'taxonomy' => 'category',
+			'hide_empty' => false,
+		] );
 
 		$options = [ '' => '' ];
 
-		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy->name ] = $taxonomy->label;
+		foreach ( $terms as $term ) {
+			$options[ $term->term_id ] = $term->name;
 		}
 
 		return $options;
@@ -389,6 +392,49 @@ class Events extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .elementor-button .elementor-align-icon-left' => 'margin-right: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'terms',
+			[
+				'label' => __( 'Category' ),
+				'type' => Controls_Manager::SELECT2,
+				'label_block' => true,
+				'default' => [],
+				'options' => $this->get_terms(),
+				'multiple' => true,
+				/*'condition' => [
+					'show_filter_bar' => 'yes',
+					'posts_post_type!' => 'by_id',
+				],*/
+			]
+		);
+
+		$this->add_control(
+			'terms_relation',
+			[
+				'label' => __( 'Terms Relation', 'msshext' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'OR',
+				'options' => [
+					'OR' => __( 'OR', 'msshext' ),
+					'AND' => __( 'AND', 'msshext' ),
+				],
+			]
+		);
+
+		$this->add_control(
+			'timeframe',
+			[
+				'label' => __( 'Timeframe', 'msshext' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'all',
+				'options' => [
+					'all' => __( 'All', 'msshext' ),
+					'future' => __( 'Future', 'msshext' ),
+					'past' => __( 'Past', 'msshext' ),
 				],
 			]
 		);
@@ -1047,7 +1093,7 @@ class Events extends Widget_Base {
 		//$this->query_posts();
 		$settings = $this->get_settings_for_display();
 
-		$posts = get_posts( array(
+		$args = array(
 			'post_type'		=> 'msshext_event',
 			'posts_per_page'=> $this->get_settings( 'posts_per_page' ),
 			'meta_query'	=> array(
@@ -1065,7 +1111,33 @@ class Events extends Widget_Base {
 				'date_start_clause' => 'ASC',
 				'time_start_clause' => 'ASC',
 			)
-		) );
+		);
+
+		if ( !empty( $settings['timeframe'] ) && $settings['timeframe'] !== 'all' ) {
+			$args['meta_query']['date_start_clause']['value'] = date( 'Ymd' );
+			if ( $settings['timeframe'] == 'future' ) {
+				$args['meta_query']['date_start_clause']['compare'] = '>=';
+			}
+			if ( $settings['timeframe'] == 'past' ) {
+				$args['meta_query']['date_start_clause']['compare'] = '<';
+			}
+		}
+
+		if ( !empty( $settings['terms'] ) ) {
+			if ( !is_array( $settings['terms'] ) ) {
+				$settings['terms'][] = $settings['terms'];
+			}
+			$args['tax_query']['relation'] = $settings['terms_relation'];
+			foreach ( $settings['terms'] as $term ) {
+				$args['tax_query'][$term.'_clause'] = array(
+					'taxonomy' => 'category',
+					'field'    => 'term_id',
+					'terms'    => $term,
+				);
+			}
+		}
+
+		$posts = get_posts( $args );
 
 		if ( empty( $posts ) ) {
 			return;
