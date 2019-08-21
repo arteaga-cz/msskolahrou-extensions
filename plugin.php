@@ -117,7 +117,8 @@ class Plugin {
 	}
 
 	public function enqueue_frontend_styles() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		//$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = '';
 
 		$direction_suffix = is_rtl() ? '-rtl' : '';
 
@@ -125,12 +126,12 @@ class Plugin {
 
 		$frontend_file_url = MSSHEXT_ASSETS_URL . 'css/' . $frontend_file_name;
 
-		/*wp_enqueue_style(
+		wp_enqueue_style(
 			'msshext-frontend',
 			$frontend_file_url,
 			[],
 			MSSHEXT_VERSION
-		);*/
+		);
 	}
 
 	public function enqueue_frontend_scripts() {

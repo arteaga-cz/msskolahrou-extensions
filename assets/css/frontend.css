@@ -1,0 +1,9 @@
+.msshext-column {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.msshext-events-hidden {
+	height: 0;
+	overflow: hidden;
+}
