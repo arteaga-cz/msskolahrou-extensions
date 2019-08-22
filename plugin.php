@@ -76,8 +76,11 @@ class Plugin {
 
 	private function includes() {
 		require_once MSSHEXT_INCLUDES_PATH . 'helpers.php';
-		require_once MSSHEXT_INCLUDES_PATH . 'post-types.php';
-		require_once MSSHEXT_INCLUDES_PATH . 'taxonomies.php';
+		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
+		require_once MSSHEXT_INCLUDES_PATH . 'content-types/events.php';
+		require_once MSSHEXT_INCLUDES_PATH . 'content-types/projects.php';
+		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/notifications.php';
+		require_once MSSHEXT_INCLUDES_PATH . 'content-types/daily_menus.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'shortcodes.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'elementor/modules-manager.php';
 

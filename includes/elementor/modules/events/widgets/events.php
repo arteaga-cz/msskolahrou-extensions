@@ -1165,7 +1165,7 @@ class Events extends Widget_Base {
 			$this->render_post();
 			$counter++;
 		}
-		error_log( '$posts: ' . print_r( $posts, true ) );
+
 		if ( empty( $posts ) ) {
 			$this->render_no_posts_message();
 		}
@@ -1222,7 +1222,7 @@ class Events extends Widget_Base {
 
 		if ( $permalink )
 			//$html .= '<a href="'.$permalink.'">' . __( 'Zobrazit více', 'msshext' ) . '</a>';
-			$html .= $this->get_readmore( $permalink );
+			$html .= $this->get_readmore( $permalink, get_the_title() );
 
 		$html.= '</div>'; //End .msshext-event-desc
 
@@ -1394,7 +1394,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function get_readmore( $href = '#' ) {
+	protected function get_readmore( $href = '#', $label = '' ) {
 		$settings = $this->get_settings_for_display();
 
 		$this->add_render_attribute( 'readmore_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
@@ -1406,13 +1406,13 @@ class Events extends Widget_Base {
 
 		$this->add_render_attribute( 'readmore', 'class', 'elementor-button' );
 		$this->add_render_attribute( 'readmore', 'class', 'msshext-event-readmore' );
-		$this->add_render_attribute( 'readmore', 'role', 'button' );
+		$this->add_render_attribute( 'readmore', 'role', 'link' );
 
 		ob_start();
 
 				?>
 				<div <?php echo $this->get_render_attribute_string( 'readmore_wrapper' ); ?>>
-					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?>>
+					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?> aria-label="<?php echo $settings['readmore_text'] . ' - ' . $label; ?>">
 						<?php $this->render_readmore_text(); ?>
 					</a>
 				</div>
@@ -1459,7 +1459,7 @@ class Events extends Widget_Base {
 				?>
 				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
 					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
-					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?> rel="icon">
 						<?php if ( $is_new || $migrated ) :
 		Icons_Manager::render_icon( $settings['readmore_selected_icon'], [ 'aria-hidden' => 'true' ] );
 		else : ?>
