@@ -77,15 +77,6 @@ function msshext_daily_menu_column_content( $column, $post_id ) {
 	}
 }
 
-add_filter( 'the_title', 'msshext_daily_menu_replace_title',10, 2 );
-function msshext_daily_menu_replace_title( $title, $id ) {
-	if ( get_post_type( $id ) === 'msshext_daily_menu' ) {
-		return date_i18n( 'l j. n.', strtotime( get_field( 'msshext_daily_menu_date', $id ) ) );
-	} else {
-		return $title;
-	}
-}
-
 // Order the results
 add_action( 'pre_get_posts', 'msshext_daily_menu_columns_orderby' );
 function msshext_daily_menu_columns_orderby( $query ) {
@@ -107,6 +98,23 @@ function msshext_daily_menu_columns_orderby( $query ) {
 
 		$query->set( 'orderby', array(
 			'date_clause' => $query->get( 'order' ),
+		) );
+	}
+}
+
+add_action( 'acf/save_post', 'msshext_daily_menu_update_title', 20 );
+function msshext_daily_menu_update_title( $post ) {
+
+	$post = get_post( $post );
+	$date = date_i18n( 'l j. n.', strtotime( get_field( 'msshext_daily_menu_date', $post ) ) );
+
+	// Make sure event post type is being saved
+	if ( !is_object( $post ) || $post->post_type != 'msshext_daily_menu' )
+		return;
+
+	if ( $post->post_title !== $date ) {
+		wp_update_post( array(
+			'post_title' => $date,
 		) );
 	}
 }
