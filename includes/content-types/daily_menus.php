@@ -118,3 +118,21 @@ function msshext_daily_menu_update_title( $post ) {
 		) );
 	}
 }
+
+/**
+ * Add options page using ACF Pro.
+ */
+add_action( 'acf/init', 'msshext_daily_menu_options' );
+function msshext_daily_menu_options() {
+
+	if ( !function_exists('acf_add_options_page') )
+		return;
+
+	// add sub page
+	acf_add_options_sub_page( array(
+		'page_title' 	=> 'Nastavení jídelníčku',
+		'menu_title' 	=> 'Nastavení',
+		'parent_slug' 	=> 'edit.php?post_type=msshext_daily_menu',
+	) );
+
+}

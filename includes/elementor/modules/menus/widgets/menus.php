@@ -669,6 +669,102 @@ class Menus extends Widget_Base {
 
 		$this->end_controls_section();
 
+		/**
+		 * CSS - MENU INFO
+		 */
+
+		$this->start_controls_section(
+			'section_style_menu_info',
+			[
+				'label' => __( 'Infokarta', 'msshext' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'infocard_background_color',
+			[
+				'label' => __( 'Background Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_4,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-info-item' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'infocard_border',
+				'selector' => '{{WRAPPER}} .msshext-menu-info-item',
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'infocard_date',
+			[
+				'label' => __( 'Vzhled nadpisu', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'infocard_heading_color',
+			[
+				'label' => __( 'Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-info-item .msshext-menu-date' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_1,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'infocard_heading_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-info-item .msshext-menu-date',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+			]
+		);
+
+		$this->add_control(
+			'infocard_inner_background_color',
+			[
+				'label' => __( 'Background Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_4,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-info-item .msshext-menu-content-wrapper' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'infocard_inner_border',
+				'selector' => '{{WRAPPER}} .msshext-menu-info-item .msshext-menu-content-wrapper',
+				'separator' => 'before',
+			]
+		);
+
+		$this->end_controls_section();
+
 	}
 
 	public function render() {
@@ -707,6 +803,9 @@ class Menus extends Widget_Base {
 			$counter++;
 		}
 
+		if ( $settings['show_general_info'] == 'yes' )
+			$this->render_info_card();
+
 		if ( empty( $posts ) ) {
 			$this->render_no_posts_message();
 		}
@@ -727,11 +826,6 @@ class Menus extends Widget_Base {
 	protected function render_post() {
 
 		$settings = $this->get_settings_for_display();
-
-		$permalink = false;
-		$content = get_the_content();
-		if ( !empty( $content ) )
-			$permalink = get_the_permalink();
 
 		$this->add_render_attribute( 'date', 'class', 'msshext-menu-date' );
 		$this->add_render_attribute( 'food-type', 'class', 'msshext-menu-food-type' );
@@ -775,6 +869,39 @@ class Menus extends Widget_Base {
 		echo $html;
 	}
 
+	protected function render_info_card() {
+
+		$settings = $this->get_settings_for_display();
+
+		$heading = get_field( 'msshext_daily_menu_general_info_heading', 'options' );
+		$content = get_field( 'msshext_daily_menu_general_info_content', 'options' );
+
+		// make sure there is info content to show.
+		if ( empty( $content ) )
+			return;
+
+		$this->add_render_attribute( 'info-heading', 'class', 'msshext-menu-date' );
+		$this->add_render_attribute( 'info-content', 'class', 'msshext-menu-info-content' );
+
+		$html = '<article class="msshext-menu-item msshext-menu-info-item elementor-post elementor-grid-item">' . PHP_EOL;
+
+		$html.= '<div class="msshext-menu-date-wrapper">' . PHP_EOL;
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['date_tag'], $this->get_render_attribute_string( 'info-heading' ), $heading );
+
+		$html.= '</div>';
+
+		$html.= '<div class="msshext-menu-content-wrapper">' . PHP_EOL;
+
+		$html.= '<div ' . $this->get_render_attribute_string( 'info-content' ) . '>' . $content . '</div>';
+
+		$html.= '</div>'; //End .msshext-menu-desc
+
+		$html .= '</article>'; //End .msshext-menu-item
+
+		echo $html;
+	}
+
 	protected function render_loop_header() {
 		?>
 		<div class="elementor-grid elementor-posts-container elementor-visible-container msshext-menus">
@@ -794,7 +921,6 @@ class Menus extends Widget_Base {
 	}
 
 	public function get_formatted_date( $date, $new_format ) {
-		error_log( '$date: ' . print_r( $date, true ) );
 		$date = date( 'Y-m-d', strtotime( $date ) );
 
 		$today = new \DateTime(); // This object represents current date/time
@@ -808,13 +934,13 @@ class Menus extends Widget_Base {
 
 		switch ( $diffDays ) {
 			case 0:
-				return __( 'Dnes', 'msshext' );
+				return mb_strtoupper( __( 'Dnes', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
 				break;
 			case -1:
-				return __( 'Včera', 'msshext' );
+				return mb_strtoupper( __( 'Včera', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
 				break;
 			case +1:
-				return __( 'Zítra', 'msshext' );
+				return mb_strtoupper( __( 'Zítra', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
 				break;
 			default:
 				return date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
