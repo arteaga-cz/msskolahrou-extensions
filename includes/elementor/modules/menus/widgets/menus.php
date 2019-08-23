@@ -126,20 +126,20 @@ class Menus extends Widget_Base {
 	protected function _register_controls() {
 
 		/**
-		 * Content - EVENTS
+		 * Content - MENUS
 		 */
 
 		$this->start_controls_section(
-			'section_menus',
+			'section_layout',
 			[
-				'label' => __( 'Menus', 'msshext' ),
+				'label' => __( 'Karty', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label' => esc_html__( 'Items to load', 'msshext' ),
+				'label' => esc_html__( 'Počet položek', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'label_block' => false,
 				'default' => 5,
@@ -149,7 +149,7 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'columns',
 			[
-				'label' => __( 'Columns', 'elementor-pro' ),
+				'label' => __( 'Sloupce', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '3',
 				'tablet_default' => '2',
@@ -173,7 +173,7 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Alignment', 'msshext' ),
+				'label' => __( 'Zarovnání obsahu', 'msshext' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
@@ -201,7 +201,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_format',
 			[
-				'label' => __( 'Date Format', 'elementor' ),
+				'label' => __( 'Formát data', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => 'l j. n.',
 			]
@@ -210,7 +210,27 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_tag',
 			[
-				'label' => __( 'HTML Tag Data', 'elementor' ),
+				'label' => __( 'HTML tag data', 'msshext' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'h1' => 'H1',
+					'h2' => 'H2',
+					'h3' => 'H3',
+					'h4' => 'H4',
+					'h5' => 'H5',
+					'h6' => 'H6',
+					'div' => 'div',
+					'span' => 'span',
+					'p' => 'p',
+				],
+				'default' => 'h3',
+			]
+		);
+
+		$this->add_control(
+			'food_title_tag',
+			[
+				'label' => __( 'HTML Tag nadpisu položky', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -235,42 +255,6 @@ class Menus extends Widget_Base {
 		);
 
 		$this->add_control(
-			'show_general_info',
-			[
-				'label' => __( 'Zobrazit obecné informace', 'msshext' ),
-				'type' => Controls_Manager::SWITCHER,
-				'default' => '',
-			]
-		);
-
-		$this->add_control(
-			'food_title_tag',
-			[
-				'label' => __( 'HTML Tag nadpisu poloky', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'h1' => 'H1',
-					'h2' => 'H2',
-					'h3' => 'H3',
-					'h4' => 'H4',
-					'h5' => 'H5',
-					'h6' => 'H6',
-					'div' => 'div',
-					'span' => 'span',
-					'p' => 'p',
-				],
-				'default' => 'h3',
-			]
-		);
-
-		$this->add_control(
-			'hr_3',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-
-		$this->add_control(
 			'no_posts_message',
 			[
 				'label' => __( 'No posts found message', 'msshext' ),
@@ -279,17 +263,73 @@ class Menus extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'show_general_info',
+			[
+				'label' => __( 'Zobrazit obecné informace', 'msshext' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+			]
+		);
+
 		$this->end_controls_section();
 
 		/**
-		 * CSS - EVENTS
+		 * CSS - MENUS
 		 */
 
 		$this->start_controls_section(
 			'section_style_menu_card',
 			[
-				'label' => __( 'Menu card', 'msshext' ),
+				'label' => __( 'Karta', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'menu_card_style',
+			[
+				'label' => __( 'Vzhled karty', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => false,
+			]
+		);
+
+		$this->add_control(
+			'column_gap',
+			[
+				'label' => __( 'Columns Gap', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-posts-container' => 'grid-column-gap: {{SIZE}}{{UNIT}}',
+					'.elementor-msie {{WRAPPER}} .elementor-portfolio' => 'margin: 0 -{{SIZE}}px',
+					'.elementor-msie {{WRAPPER}} .elementor-portfolio-item' => 'border-style: solid; border-color: transparent; border-right-width: calc({{SIZE}}px / 2); border-left-width: calc({{SIZE}}px / 2)',
+				],
+			]
+		);
+
+		$this->add_control(
+			'row_gap',
+			[
+				'label' => __( 'Rows Gap', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'frontend_available' => true,
+				'selectors' => [
+					'{{WRAPPER}} .elementor-posts-container' => 'grid-row-gap: {{SIZE}}{{UNIT}}',
+					'.elementor-msie {{WRAPPER}} .elementor-portfolio-item' => 'border-bottom-width: {{SIZE}}px',
+				],
 			]
 		);
 
@@ -303,7 +343,7 @@ class Menus extends Widget_Base {
 					'value' => Scheme_Color::COLOR_4,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-event-wrapper' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-menu-item' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -311,14 +351,14 @@ class Menus extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'event_card_border',
+				'name' => 'menu_card_border',
 				'selector' => '{{WRAPPER}} .msshext-menu-item',
 				'separator' => 'before',
 			]
 		);
 
 		$this->add_control(
-			'event_card_radius',
+			'menu_card_radius',
 			[
 				'label' => __( 'Border Radius', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
@@ -330,7 +370,7 @@ class Menus extends Widget_Base {
 		);
 
 		$this->add_control(
-			'event_card_margin',
+			'menu_card_margin',
 			[
 				'label' => __( 'Card Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
@@ -341,26 +381,14 @@ class Menus extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'event_card_date_col_padding',
+		$this->add_responsive_control(
+			'menu_card_padding',
 			[
-				'label' => __( 'Date Column Padding', 'elementor' ),
+				'label' => __( 'Padding', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-timing' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'event_card_desc_col_padding',
-			[
-				'label' => __( 'Desc. Column Padding', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'rem', 'em', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-desc' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .msshext-menu-item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -368,18 +396,17 @@ class Menus extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name' => 'event_card_box_shadow',
+				'name' => 'menu_card_box_shadow',
 				'selector' => '{{WRAPPER}} .msshext-menu-item',
 			]
 		);
 
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_style_event_date',
+		$this->add_control(
+			'menu_card_date',
 			[
-				'label' => __( 'Event date', 'msshext' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label' => __( 'Vzhled data', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
 			]
 		);
 
@@ -390,7 +417,7 @@ class Menus extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-timing' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-menu-date' => 'color: {{VALUE}};',
 				],
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -403,7 +430,7 @@ class Menus extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'date_typography',
-				'selector' => '{{WRAPPER}} .msshext-menu-timing',
+				'selector' => '{{WRAPPER}} .msshext-menu-date',
 				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
 			]
 		);
@@ -413,30 +440,112 @@ class Menus extends Widget_Base {
 			[
 				'label' => __( 'Margin', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-timing' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .msshext-menu-date' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->end_controls_section();
 
+		/**
+		 * CSS - MENU INNER
+		 */
+
 		$this->start_controls_section(
-			'section_style_event_title',
+			'section_style_menu_inner',
 			[
-				'label' => __( 'Event title', 'msshext' ),
+				'label' => __( 'Vnitřek karty', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'title_color',
+			'menu_inner_background_color',
+			[
+				'label' => __( 'Background Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_4,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'menu_inner_border',
+				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper',
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'menu_inner_radius',
+			[
+				'label' => __( 'Border Radius', 'msshext' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_inner_margin',
+			[
+				'label' => __( 'Card Margin', 'msshext' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'menu_inner_padding',
+			[
+				'label' => __( 'Padding', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'menu_inner_box_shadow',
+				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper',
+			]
+		);
+
+		$this->add_control(
+			'menu_inner_headings',
+			[
+				'label' => __( 'Vzhled nadpisů', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'food_title_color',
 			[
 				'label' => __( 'Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-type' => 'color: {{VALUE}};',
 				],
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -448,41 +557,41 @@ class Menus extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'title_typography',
-				'selector' => '{{WRAPPER}} .msshext-menu-title',
+				'name' => 'food_title_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-type',
 				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
 			]
 		);
 
 		$this->add_control(
-			'title_margin',
+			'food_title_margin',
 			[
 				'label' => __( 'Margin', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-type' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_style_event_excerpt',
+		$this->add_control(
+			'menu_inner_foods',
 			[
-				'label' => __( 'Event content', 'msshext' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label' => __( 'Vzhled jídel', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
 			]
 		);
 
 		$this->add_control(
-			'excerpt_color',
+			'food_content_color',
 			[
-				'label' => __( 'Text Color', 'msshext' ),
+				'label' => __( 'Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-desc .msshext-menu-excerpt' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-list' => 'color: {{VALUE}};',
 				],
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -494,19 +603,66 @@ class Menus extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'excerpt_typography',
-				'selector' => '{{WRAPPER}} .msshext-menu-desc .msshext-menu-excerpt',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'name' => 'food_content_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-list',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
 			]
 		);
 
 		$this->add_control(
-			'excerpt_margin',
+			'food_content_margin',
 			[
 				'label' => __( 'Margin', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .msshext-menu-excerpt' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-list' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_inner_allergens',
+			[
+				'label' => __( 'Vzhled alergenů', 'msshext' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'food_allergens_color',
+			[
+				'label' => __( 'Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-allergens' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_1,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'food_allergens_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-allergens',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+			]
+		);
+
+		$this->add_control(
+			'food_allergens_margin',
+			[
+				'label' => __( 'Margin', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-allergens' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -579,36 +735,38 @@ class Menus extends Widget_Base {
 
 		$this->add_render_attribute( 'date', 'class', 'msshext-menu-date' );
 		$this->add_render_attribute( 'food-type', 'class', 'msshext-menu-food-type' );
+		$this->add_render_attribute( 'food-type', 'class', 'msshext-menu-food-line' );
 		$this->add_render_attribute( 'food-list', 'class', 'msshext-menu-food-list' );
+		$this->add_render_attribute( 'food-list', 'class', 'msshext-menu-food-line' );
 		$this->add_render_attribute( 'food-allergens', 'class', 'msshext-menu-food-allergens' );
 
 		$html = '<article class="msshext-menu-item elementor-post elementor-grid-item">' . PHP_EOL;
 
-		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['date_tag'], $this->get_render_attribute_string( 'date' ), $text );
-
 		$html.= '<div class="msshext-menu-date-wrapper">' . PHP_EOL;
 
-		$html.= date_i18n( $settings['date_format'],  strtotime( get_field( 'msshext_daily_menu_date', get_the_ID() ) ) );
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['date_tag'], $this->get_render_attribute_string( 'date' ),
+						$this->get_formatted_date( get_field( 'msshext_daily_menu_date', get_the_ID() ), $settings['date_format'] )
+				);
 
 		$html.= '</div>';
 
 		$html.= '<div class="msshext-menu-content-wrapper">' . PHP_EOL;
 
 		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Přesnídávka', 'msshext' ) );
-		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_snack_1', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_snack_1', get_the_ID() ) . '</p>';
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_snack_1_allergens', get_the_ID() ) . '</p>';
 
 
 		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Oběd', 'msshext' ) );
-		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_lunch', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_lunch', get_the_ID() ) . '</p>';
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_lunch_allergens', get_the_ID() ) . '</p>';
 
 		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Svačina', 'msshext' ) );
-		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_snack_2', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_snack_2', get_the_ID() ) . '</p>';
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_snack_2_allergens', get_the_ID() ) . '</p>';
 
 		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Pitný režim', 'msshext' ) );
-		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_drinks', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_drinks', get_the_ID() ) . '</p>';
 
 		$html.= '</div>'; //End .msshext-menu-desc
 
@@ -619,7 +777,7 @@ class Menus extends Widget_Base {
 
 	protected function render_loop_header() {
 		?>
-		<div class="elementor-events elementor-grid elementor-posts-container elementor-visible-container msshext-menus">
+		<div class="elementor-grid elementor-posts-container elementor-visible-container msshext-menus">
 		<?php
 	}
 
@@ -635,261 +793,32 @@ class Menus extends Widget_Base {
 		echo $html.= sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
 	}
 
-	/**
-	 * Get button sizes.
-	 *
-	 * Retrieve an array of button sizes for the button widget.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 *
-	 * @return array An array containing button sizes.
-	 */
-	public static function get_button_sizes() {
-		return [
-			'xs' => __( 'Extra Small', 'elementor' ),
-			'sm' => __( 'Small', 'elementor' ),
-			'md' => __( 'Medium', 'elementor' ),
-			'lg' => __( 'Large', 'elementor' ),
-			'xl' => __( 'Extra Large', 'elementor' ),
-		];
-	}
+	public function get_formatted_date( $date, $new_format ) {
+		error_log( '$date: ' . print_r( $date, true ) );
+		$date = date( 'Y-m-d', strtotime( $date ) );
 
-	/**
-	 * Render button widget output on the frontend.
-	 *
-	 * Written in PHP and used to generate the final HTML.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function render_button() {
-		$settings = $this->get_settings_for_display();
+		$today = new \DateTime(); // This object represents current date/time
+		$today->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
 
-		$this->add_render_attribute( 'button_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
+		$match_date = new \DateTime( $date );
+		$match_date->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
 
-		if ( ! empty( $settings['button_link']['url'] ) ) {
-			$this->add_render_attribute( 'button', 'href', $settings['button_link']['url'] );
-			$this->add_render_attribute( 'button', 'class', 'elementor-button-link' );
+		$diff = $today->diff( $match_date );
+		$diffDays = (integer)$diff->format( "%R%a" ); // Extract days count in interval
 
-			if ( $settings['button_link']['is_external'] ) {
-				$this->add_render_attribute( 'button', 'target', '_blank' );
-			}
-
-			if ( $settings['button_link']['nofollow'] ) {
-				$this->add_render_attribute( 'button', 'rel', 'nofollow' );
-			}
+		switch ( $diffDays ) {
+			case 0:
+				return __( 'Dnes', 'msshext' );
+				break;
+			case -1:
+				return __( 'Včera', 'msshext' );
+				break;
+			case +1:
+				return __( 'Zítra', 'msshext' );
+				break;
+			default:
+				return date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
 		}
-
-		$this->add_render_attribute( 'button', 'class', 'elementor-button' );
-		$this->add_render_attribute( 'button', 'class', 'msshext-menus-show-all' );
-		$this->add_render_attribute( 'button', 'role', 'button' );
-
-		if ( ! empty( $settings['button_css_id'] ) ) {
-			$this->add_render_attribute( 'button', 'id', $settings['button_css_id'] );
-		}
-
-		if ( ! empty( $settings['button_size'] ) ) {
-			$this->add_render_attribute( 'button', 'class', 'elementor-size-' . $settings['button_size'] );
-		}
-
-		if ( $settings['button_hover_animation'] ) {
-			$this->add_render_attribute( 'button', 'class', 'elementor-animation-' . $settings['button_hover_animation'] );
-		}
-
-				?>
-				<div <?php echo $this->get_render_attribute_string( 'button_wrapper' ); ?>>
-					<a <?php echo $this->get_render_attribute_string( 'button' ); ?>>
-						<?php $this->render_button_text(); ?>
-					</a>
-				</div>
-				<?php
-	}
-
-	/**
-	 * Render button text.
-	 *
-	 * Render button widget text.
-	 *
-	 * @since 1.5.0
-	 * @access protected
-	 */
-	protected function render_button_text() {
-		$settings = $this->get_settings_for_display();
-
-		$migrated = isset( $settings['__fa4_migrated']['button_selected_icon'] );
-		$is_new = empty( $settings['button_icon'] ) && Icons_Manager::is_migration_allowed();
-
-		if ( ! $is_new && empty( $settings['button_icon_align'] ) ) {
-			// @todo: remove when deprecated
-			// added as bc in 2.6
-			//old default
-			$settings['button_icon_align'] = $this->get_settings( 'button_icon_align' );
-		}
-
-		$this->add_render_attribute( [
-			'content-wrapper' => [
-				'class' => 'elementor-button-content-wrapper',
-			],
-			'icon-align' => [
-				'class' => [
-					'elementor-button-icon',
-					'elementor-align-icon-' . $settings['button_icon_align'],
-				],
-			],
-			'text' => [
-				'class' => 'elementor-button-text',
-			],
-		] );
-
-		//$this->add_inline_editing_attributes( 'text', 'none' );
-				?>
-				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
-					<?php if ( ! empty( $settings['button_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
-					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
-						<?php if ( $is_new || $migrated ) :
-		Icons_Manager::render_icon( $settings['button_selected_icon'], [ 'aria-hidden' => 'true' ] );
-		else : ?>
-						<i class="<?php echo esc_attr( $settings['button_icon'] ); ?>" aria-hidden="true"></i>
-						<?php endif; ?>
-					</span>
-					<?php endif; ?>
-					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['button_text']; ?></span>
-				</span>
-				<?php
-	}
-
-	/**
-	 * Render readmore output on the frontend.
-	 *
-	 * Written in PHP and used to generate the final HTML.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function get_readmore( $href = '#', $label = '' ) {
-		$settings = $this->get_settings_for_display();
-
-		$this->add_render_attribute( 'readmore_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
-
-		if ( ! empty( $href ) ) {
-			$this->add_render_attribute( 'readmore', 'href', $href );
-			$this->add_render_attribute( 'readmore', 'class', 'elementor-button-link' );
-		}
-
-		$this->add_render_attribute( 'readmore', 'class', 'elementor-button' );
-		$this->add_render_attribute( 'readmore', 'class', 'msshext-menu-readmore' );
-		$this->add_render_attribute( 'readmore', 'role', 'link' );
-
-		ob_start();
-
-				?>
-				<div <?php echo $this->get_render_attribute_string( 'readmore_wrapper' ); ?>>
-					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?> aria-label="<?php echo $settings['readmore_text'] . ' - ' . $label; ?>">
-						<?php $this->render_readmore_text(); ?>
-					</a>
-				</div>
-				<?php
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Render readmore text.
-	 *
-	 * @since 1.5.0
-	 * @access protected
-	 */
-	protected function render_readmore_text() {
-		$settings = $this->get_settings_for_display();
-
-		$migrated = isset( $settings['__fa4_migrated']['readmore_selected_icon'] );
-		$is_new = empty( $settings['readmore_icon'] ) && Icons_Manager::is_migration_allowed();
-
-		if ( ! $is_new && empty( $settings['readmore_icon_align'] ) ) {
-			// @todo: remove when deprecated
-			// added as bc in 2.6
-			//old default
-			$settings['readmore_icon_align'] = $this->get_settings( 'readmore_icon_align' );
-		}
-
-		$this->add_render_attribute( [
-			'content-wrapper' => [
-				'class' => 'elementor-button-content-wrapper',
-			],
-			'icon-align' => [
-				'class' => [
-					'elementor-button-icon',
-					'elementor-align-icon-' . $settings['readmore_icon_align'],
-				],
-			],
-			'text' => [
-				'class' => 'elementor-button-text',
-			],
-		] );
-
-		//$this->add_inline_editing_attributes( 'text', 'none' );
-				?>
-				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
-					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
-					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?> rel="icon">
-						<?php if ( $is_new || $migrated ) :
-		Icons_Manager::render_icon( $settings['readmore_selected_icon'], [ 'aria-hidden' => 'true' ] );
-		else : ?>
-						<i class="<?php echo esc_attr( $settings['readmore_icon'] ); ?>" aria-hidden="true"></i>
-						<?php endif; ?>
-					</span>
-					<?php endif; ?>
-					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['readmore_text']; ?></span>
-				</span>
-				<?php
-	}
-
-	/**
-	 * Render image box widget output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function _content_template2() {
-?>
-<#
-   var html = '<div class="elementor-event-wrapper msshext-advanced-event-wrapper">';
-
-   var hasContent = !! ( settings.title_text || settings.description_text );
-
-   if ( hasContent ) {
-   html += '<div class="elementor-event-content msshext-advanced-event-content">';
-
-   if ( settings.title_text ) {
-   var title_html = settings.title_text;
-
-   view.addRenderAttribute( 'title_text', 'class', 'elementor-event-title msshext-advanced-event-title' );
-
-   view.addInlineEditingAttributes( 'title_text', 'none' );
-
-   html += '<' + settings.title_tag  + ' ' + view.getRenderAttributeString( 'title_text' ) + '>' + title_html + '</' + settings.title_tag  + '>';
-   }
-
-   if ( settings.description_text ) {
-   view.addRenderAttribute( 'description_text', 'class', 'elementor-event-description msshext-advanced-event-description' );
-
-   view.addInlineEditingAttributes( 'description_text' );
-
-   html += '<p ' + view.getRenderAttributeString( 'description_text' ) + '>' + settings.description_text + '</p>';
-   }
-
-   html += '</div>';
-   }
-
-   html += '</div>';
-
-   print( html );
-   #>
-	<?php
 	}
 
 }

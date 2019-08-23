@@ -3,7 +3,11 @@
 	vertical-align: top;
 }
 
-.msshext-events-hidden {
+.msshext-menu-content-wrapper .msshext-events-hidden {
 	height: 0;
 	overflow: hidden;
+}
+
+.msshext-menu-content-wrapper .msshext-menu-food-line {
+	margin-bottom: 0;
 }
