@@ -3,7 +3,7 @@
 	vertical-align: top;
 }
 
-.msshext-menu-content-wrapper .msshext-events-hidden {
+.msshext-events-hidden {
 	height: 0;
 	overflow: hidden;
 }

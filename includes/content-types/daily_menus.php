@@ -84,6 +84,9 @@ function msshext_daily_menu_columns_orderby( $query ) {
 	if ( !is_admin() )
 		return;
 
+	if ( $query->get( 'post_type' ) !== 'msshext_daily_menu' )
+		return;
+
 	$orderby = $query->get( 'orderby' );
 
 	if ( $orderby == 'title' || empty( $orderby ) ) {

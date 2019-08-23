@@ -151,24 +151,6 @@ class Plugin {
 			true
 		);
 
-		/*$locale_settings = [
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce' => wp_create_nonce( 'msshext-frontend' ),
-		];*/
-
-		/**
-		 * Localize frontend settings.
-		 *
-		 * Filters the frontend localized settings.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $locale_settings Localized settings.
-		 */
-		/*$locale_settings = apply_filters( 'msshext/frontend/localize_settings', $locale_settings );
-
-		if ( !empty( $locale_settings ) )
-			wp_localize_script( 'msshext-frontend', 'MsshextElementorConfig', $locale_settings );*/
 	}
 
 	public function register_frontend_scripts() {
@@ -223,7 +205,7 @@ class Plugin {
 	 */
 	private function __construct() {
 
-		if ( ! is_plugin_active( 'elementor-pro/elementor-pro.php' ) ) { //NOTE Refactor so that Elementor Pro is not needed.
+		if ( ! is_plugin_active( 'elementor-pro/elementor-pro.php' ) ) {
 			return;
 		}
 
