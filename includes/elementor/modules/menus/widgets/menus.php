@@ -1,0 +1,895 @@
+<?php
+namespace MSSHEXT\Elementor\Modules\Menus\Widgets;
+
+use Elementor\Group_Control_Css_Filter;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Text_Shadow;
+use Elementor\Scheme_Color;
+use Elementor\Icons_Manager;
+use Elementor\Scheme_Typography;
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Controls_Stack;
+//use ElementorPro\Modules\QueryControl\Module as Module_Query;
+//use ElementorPro\Modules\QueryControl\Controls\Group_Control_Related;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+/**
+ * @since 1.0.0
+ */
+class Menus extends Widget_Base {
+
+	/**
+	 * @var \WP_Query
+	 */
+	private $_query = null;
+
+	/**
+	 * Retrieve the widget name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget name.
+	 */
+	public function get_name() {
+		return 'msshext-menus';
+	}
+
+	/**
+	 * Retrieve the widget title.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget title.
+	 */
+	public function get_title() {
+		return __( 'MŠ Jídelníček', 'msshext' );
+	}
+
+	/**
+	 * Retrieve the widget icon.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget icon.
+	 */
+	public function get_icon() {
+		return 'eicon-post-list';
+	}
+
+	/**
+	 * Get widget keywords.
+	 *
+	 * Retrieve the list of keywords the widget belongs to.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return array Widget keywords.
+	 */
+	public function get_keywords() {
+		return [ 'loop', 'posts', 'list' ];
+	}
+
+	/**
+	 * Retrieve the list of categories the widget belongs to.
+	 *
+	 * Used to determine where to display the widget in the editor.
+	 *
+	 * Note that currently Elementor supports only one category.
+	 * When multiple categories passed, Elementor uses the first one.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return array Widget categories.
+	 */
+	public function get_categories() {
+		return [ 'msshext' ];
+	}
+
+	protected function get_terms() {
+		$terms = get_terms( [
+			'taxonomy' => 'category',
+			'hide_empty' => false,
+		] );
+
+		$options = [ '' => '' ];
+
+		foreach ( $terms as $term ) {
+			$options[ $term->term_id ] = $term->name;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Register menu widget controls.
+	 *
+	 * Adds different input fields to allow the user to change and customize the widget settings.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function _register_controls() {
+
+		/**
+		 * Content - EVENTS
+		 */
+
+		$this->start_controls_section(
+			'section_menus',
+			[
+				'label' => __( 'Menus', 'msshext' ),
+			]
+		);
+
+		$this->add_control(
+			'posts_per_page',
+			[
+				'label' => esc_html__( 'Items to load', 'msshext' ),
+				'type' => Controls_Manager::TEXT,
+				'label_block' => false,
+				'default' => 5,
+			]
+		);
+
+		$this->add_responsive_control(
+			'columns',
+			[
+				'label' => __( 'Columns', 'elementor-pro' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => '3',
+				'tablet_default' => '2',
+				'mobile_default' => '1',
+				'options' => [
+					'1' => '1',
+					'2' => '2',
+					'3' => '3',
+					'4' => '4',
+					'5' => '5',
+					'6' => '6',
+				],
+				'prefix_class' => 'elementor-grid%s-',
+				'frontend_available' => true,
+				'selectors' => [
+					'.elementor-msie {{WRAPPER}} .msshext-menu-item' => 'width: calc( 100% / {{SIZE}} )',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'align',
+			[
+				'label' => __( 'Alignment', 'msshext' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left'    => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'eicon-text-align-right',
+					],
+					'justify' => [
+						'title' => __( 'Justified', 'elementor' ),
+						'icon' => 'eicon-text-align-justify',
+					],
+				],
+				'prefix_class' => 'elementor%s-align-',
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'date_format',
+			[
+				'label' => __( 'Date Format', 'elementor' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => 'l j. n.',
+			]
+		);
+
+		$this->add_control(
+			'date_tag',
+			[
+				'label' => __( 'HTML Tag Data', 'elementor' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'h1' => 'H1',
+					'h2' => 'H2',
+					'h3' => 'H3',
+					'h4' => 'H4',
+					'h5' => 'H5',
+					'h6' => 'H6',
+					'div' => 'div',
+					'span' => 'span',
+					'p' => 'p',
+				],
+				'default' => 'h3',
+			]
+		);
+
+		$this->add_control(
+			'hr_1',
+			[
+				'type' => Controls_Manager::DIVIDER,
+			]
+		);
+
+		$this->add_control(
+			'show_general_info',
+			[
+				'label' => __( 'Zobrazit obecné informace', 'msshext' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'food_title_tag',
+			[
+				'label' => __( 'HTML Tag nadpisu poloky', 'elementor' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'h1' => 'H1',
+					'h2' => 'H2',
+					'h3' => 'H3',
+					'h4' => 'H4',
+					'h5' => 'H5',
+					'h6' => 'H6',
+					'div' => 'div',
+					'span' => 'span',
+					'p' => 'p',
+				],
+				'default' => 'h3',
+			]
+		);
+
+		$this->add_control(
+			'hr_3',
+			[
+				'type' => Controls_Manager::DIVIDER,
+			]
+		);
+
+		$this->add_control(
+			'no_posts_message',
+			[
+				'label' => __( 'No posts found message', 'msshext' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => __( 'Zatím žádné události.'),
+			]
+		);
+
+		$this->end_controls_section();
+
+		/**
+		 * CSS - EVENTS
+		 */
+
+		$this->start_controls_section(
+			'section_style_menu_card',
+			[
+				'label' => __( 'Menu card', 'msshext' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'menu_card_background_color',
+			[
+				'label' => __( 'Background Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_4,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-event-wrapper' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'event_card_border',
+				'selector' => '{{WRAPPER}} .msshext-menu-item',
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'event_card_radius',
+			[
+				'label' => __( 'Border Radius', 'msshext' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'event_card_margin',
+			[
+				'label' => __( 'Card Margin', 'msshext' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-item' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'event_card_date_col_padding',
+			[
+				'label' => __( 'Date Column Padding', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-timing' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'event_card_desc_col_padding',
+			[
+				'label' => __( 'Desc. Column Padding', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-desc' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'event_card_box_shadow',
+				'selector' => '{{WRAPPER}} .msshext-menu-item',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_style_event_date',
+			[
+				'label' => __( 'Event date', 'msshext' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'date_color',
+			[
+				'label' => __( 'Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-timing' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_1,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'date_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-timing',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+			]
+		);
+
+		$this->add_control(
+			'date_margin',
+			[
+				'label' => __( 'Margin', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-timing' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_style_event_title',
+			[
+				'label' => __( 'Event title', 'msshext' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'title_color',
+			[
+				'label' => __( 'Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-title' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_1,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'title_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-title',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+			]
+		);
+
+		$this->add_control(
+			'title_margin',
+			[
+				'label' => __( 'Margin', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_style_event_excerpt',
+			[
+				'label' => __( 'Event content', 'msshext' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'excerpt_color',
+			[
+				'label' => __( 'Text Color', 'msshext' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-desc .msshext-menu-excerpt' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_1,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'excerpt_typography',
+				'selector' => '{{WRAPPER}} .msshext-menu-desc .msshext-menu-excerpt',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+			]
+		);
+
+		$this->add_control(
+			'excerpt_margin',
+			[
+				'label' => __( 'Margin', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'selectors' => [
+					'{{WRAPPER}} .msshext-menu-excerpt' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+	}
+
+	public function render() {
+
+		global $post;
+
+		$settings = $this->get_settings_for_display();
+
+		$args = array(
+			'post_type'		=> 'msshext_daily_menu',
+			'posts_per_page'=> $this->get_settings( 'posts_per_page' ),
+			'meta_query'	=> array(
+				'relation' 	=> 'AND',
+				'date_clause'	=> array(
+					'key'		=> 'msshext_daily_menu_date',
+					'compare'	=> '>=',
+					'value'		=> date( 'Ymd' ),
+				),
+			),
+			'orderby'		=> array(
+				'date_clause' 	=> 'ASC',
+			)
+		);
+
+		$posts = get_posts( $args );
+
+		$month = '';
+		$counter = 0;
+		$show_button = false;
+		$this->render_loop_header();
+
+		foreach ( $posts as $post ) {
+			setup_postdata( $post );
+
+			$this->render_post();
+			$counter++;
+		}
+
+		if ( empty( $posts ) ) {
+			$this->render_no_posts_message();
+		}
+
+		$this->render_loop_footer( $show_button );
+
+		wp_reset_postdata();
+	}
+
+	/**
+	 * Render image box widget output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function render_post() {
+
+		$settings = $this->get_settings_for_display();
+
+		$permalink = false;
+		$content = get_the_content();
+		if ( !empty( $content ) )
+			$permalink = get_the_permalink();
+
+		$this->add_render_attribute( 'date', 'class', 'msshext-menu-date' );
+		$this->add_render_attribute( 'food-type', 'class', 'msshext-menu-food-type' );
+		$this->add_render_attribute( 'food-list', 'class', 'msshext-menu-food-list' );
+		$this->add_render_attribute( 'food-allergens', 'class', 'msshext-menu-food-allergens' );
+
+		$html = '<article class="msshext-menu-item elementor-post elementor-grid-item">' . PHP_EOL;
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['date_tag'], $this->get_render_attribute_string( 'date' ), $text );
+
+		$html.= '<div class="msshext-menu-date-wrapper">' . PHP_EOL;
+
+		$html.= date_i18n( $settings['date_format'],  strtotime( get_field( 'msshext_daily_menu_date', get_the_ID() ) ) );
+
+		$html.= '</div>';
+
+		$html.= '<div class="msshext-menu-content-wrapper">' . PHP_EOL;
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Přesnídávka', 'msshext' ) );
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_snack_1', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_snack_1_allergens', get_the_ID() ) . '</p>';
+
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Oběd', 'msshext' ) );
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_lunch', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_lunch_allergens', get_the_ID() ) . '</p>';
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Svačina', 'msshext' ) );
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_snack_2', get_the_ID() ) . '</strong></p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_snack_2_allergens', get_the_ID() ) . '</p>';
+
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Pitný režim', 'msshext' ) );
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '><strong>' . get_field( 'msshext_daily_menu_drinks', get_the_ID() ) . '</strong></p>';
+
+		$html.= '</div>'; //End .msshext-menu-desc
+
+		$html .= '</article>'; //End .msshext-menu-item
+
+		echo $html;
+	}
+
+	protected function render_loop_header() {
+		?>
+		<div class="elementor-events elementor-grid elementor-posts-container elementor-visible-container msshext-menus">
+		<?php
+	}
+
+	protected function render_loop_footer( $show_button = false ) {
+		?>
+		</div>
+		<?php
+	}
+
+	protected function render_no_posts_message() {
+		$settings = $this->get_settings_for_display();
+		$this->add_render_attribute( 'no_posts_message', 'class', 'msshext-no-posts-message' );
+		echo $html.= sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
+	}
+
+	/**
+	 * Get button sizes.
+	 *
+	 * Retrieve an array of button sizes for the button widget.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @static
+	 *
+	 * @return array An array containing button sizes.
+	 */
+	public static function get_button_sizes() {
+		return [
+			'xs' => __( 'Extra Small', 'elementor' ),
+			'sm' => __( 'Small', 'elementor' ),
+			'md' => __( 'Medium', 'elementor' ),
+			'lg' => __( 'Large', 'elementor' ),
+			'xl' => __( 'Extra Large', 'elementor' ),
+		];
+	}
+
+	/**
+	 * Render button widget output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function render_button() {
+		$settings = $this->get_settings_for_display();
+
+		$this->add_render_attribute( 'button_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
+
+		if ( ! empty( $settings['button_link']['url'] ) ) {
+			$this->add_render_attribute( 'button', 'href', $settings['button_link']['url'] );
+			$this->add_render_attribute( 'button', 'class', 'elementor-button-link' );
+
+			if ( $settings['button_link']['is_external'] ) {
+				$this->add_render_attribute( 'button', 'target', '_blank' );
+			}
+
+			if ( $settings['button_link']['nofollow'] ) {
+				$this->add_render_attribute( 'button', 'rel', 'nofollow' );
+			}
+		}
+
+		$this->add_render_attribute( 'button', 'class', 'elementor-button' );
+		$this->add_render_attribute( 'button', 'class', 'msshext-menus-show-all' );
+		$this->add_render_attribute( 'button', 'role', 'button' );
+
+		if ( ! empty( $settings['button_css_id'] ) ) {
+			$this->add_render_attribute( 'button', 'id', $settings['button_css_id'] );
+		}
+
+		if ( ! empty( $settings['button_size'] ) ) {
+			$this->add_render_attribute( 'button', 'class', 'elementor-size-' . $settings['button_size'] );
+		}
+
+		if ( $settings['button_hover_animation'] ) {
+			$this->add_render_attribute( 'button', 'class', 'elementor-animation-' . $settings['button_hover_animation'] );
+		}
+
+				?>
+				<div <?php echo $this->get_render_attribute_string( 'button_wrapper' ); ?>>
+					<a <?php echo $this->get_render_attribute_string( 'button' ); ?>>
+						<?php $this->render_button_text(); ?>
+					</a>
+				</div>
+				<?php
+	}
+
+	/**
+	 * Render button text.
+	 *
+	 * Render button widget text.
+	 *
+	 * @since 1.5.0
+	 * @access protected
+	 */
+	protected function render_button_text() {
+		$settings = $this->get_settings_for_display();
+
+		$migrated = isset( $settings['__fa4_migrated']['button_selected_icon'] );
+		$is_new = empty( $settings['button_icon'] ) && Icons_Manager::is_migration_allowed();
+
+		if ( ! $is_new && empty( $settings['button_icon_align'] ) ) {
+			// @todo: remove when deprecated
+			// added as bc in 2.6
+			//old default
+			$settings['button_icon_align'] = $this->get_settings( 'button_icon_align' );
+		}
+
+		$this->add_render_attribute( [
+			'content-wrapper' => [
+				'class' => 'elementor-button-content-wrapper',
+			],
+			'icon-align' => [
+				'class' => [
+					'elementor-button-icon',
+					'elementor-align-icon-' . $settings['button_icon_align'],
+				],
+			],
+			'text' => [
+				'class' => 'elementor-button-text',
+			],
+		] );
+
+		//$this->add_inline_editing_attributes( 'text', 'none' );
+				?>
+				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
+					<?php if ( ! empty( $settings['button_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
+					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+						<?php if ( $is_new || $migrated ) :
+		Icons_Manager::render_icon( $settings['button_selected_icon'], [ 'aria-hidden' => 'true' ] );
+		else : ?>
+						<i class="<?php echo esc_attr( $settings['button_icon'] ); ?>" aria-hidden="true"></i>
+						<?php endif; ?>
+					</span>
+					<?php endif; ?>
+					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['button_text']; ?></span>
+				</span>
+				<?php
+	}
+
+	/**
+	 * Render readmore output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function get_readmore( $href = '#', $label = '' ) {
+		$settings = $this->get_settings_for_display();
+
+		$this->add_render_attribute( 'readmore_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
+
+		if ( ! empty( $href ) ) {
+			$this->add_render_attribute( 'readmore', 'href', $href );
+			$this->add_render_attribute( 'readmore', 'class', 'elementor-button-link' );
+		}
+
+		$this->add_render_attribute( 'readmore', 'class', 'elementor-button' );
+		$this->add_render_attribute( 'readmore', 'class', 'msshext-menu-readmore' );
+		$this->add_render_attribute( 'readmore', 'role', 'link' );
+
+		ob_start();
+
+				?>
+				<div <?php echo $this->get_render_attribute_string( 'readmore_wrapper' ); ?>>
+					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?> aria-label="<?php echo $settings['readmore_text'] . ' - ' . $label; ?>">
+						<?php $this->render_readmore_text(); ?>
+					</a>
+				</div>
+				<?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render readmore text.
+	 *
+	 * @since 1.5.0
+	 * @access protected
+	 */
+	protected function render_readmore_text() {
+		$settings = $this->get_settings_for_display();
+
+		$migrated = isset( $settings['__fa4_migrated']['readmore_selected_icon'] );
+		$is_new = empty( $settings['readmore_icon'] ) && Icons_Manager::is_migration_allowed();
+
+		if ( ! $is_new && empty( $settings['readmore_icon_align'] ) ) {
+			// @todo: remove when deprecated
+			// added as bc in 2.6
+			//old default
+			$settings['readmore_icon_align'] = $this->get_settings( 'readmore_icon_align' );
+		}
+
+		$this->add_render_attribute( [
+			'content-wrapper' => [
+				'class' => 'elementor-button-content-wrapper',
+			],
+			'icon-align' => [
+				'class' => [
+					'elementor-button-icon',
+					'elementor-align-icon-' . $settings['readmore_icon_align'],
+				],
+			],
+			'text' => [
+				'class' => 'elementor-button-text',
+			],
+		] );
+
+		//$this->add_inline_editing_attributes( 'text', 'none' );
+				?>
+				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
+					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
+					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?> rel="icon">
+						<?php if ( $is_new || $migrated ) :
+		Icons_Manager::render_icon( $settings['readmore_selected_icon'], [ 'aria-hidden' => 'true' ] );
+		else : ?>
+						<i class="<?php echo esc_attr( $settings['readmore_icon'] ); ?>" aria-hidden="true"></i>
+						<?php endif; ?>
+					</span>
+					<?php endif; ?>
+					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['readmore_text']; ?></span>
+				</span>
+				<?php
+	}
+
+	/**
+	 * Render image box widget output in the editor.
+	 *
+	 * Written as a Backbone JavaScript template and used to generate the live preview.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
+	protected function _content_template2() {
+?>
+<#
+   var html = '<div class="elementor-event-wrapper msshext-advanced-event-wrapper">';
+
+   var hasContent = !! ( settings.title_text || settings.description_text );
+
+   if ( hasContent ) {
+   html += '<div class="elementor-event-content msshext-advanced-event-content">';
+
+   if ( settings.title_text ) {
+   var title_html = settings.title_text;
+
+   view.addRenderAttribute( 'title_text', 'class', 'elementor-event-title msshext-advanced-event-title' );
+
+   view.addInlineEditingAttributes( 'title_text', 'none' );
+
+   html += '<' + settings.title_tag  + ' ' + view.getRenderAttributeString( 'title_text' ) + '>' + title_html + '</' + settings.title_tag  + '>';
+   }
+
+   if ( settings.description_text ) {
+   view.addRenderAttribute( 'description_text', 'class', 'elementor-event-description msshext-advanced-event-description' );
+
+   view.addInlineEditingAttributes( 'description_text' );
+
+   html += '<p ' + view.getRenderAttributeString( 'description_text' ) + '>' + settings.description_text + '</p>';
+   }
+
+   html += '</div>';
+   }
+
+   html += '</div>';
+
+   print( html );
+   #>
+	<?php
+	}
+
+}

@@ -19,6 +19,7 @@ final class Modules_Manager {
 			//'advanced-image-box',
 			//'forms',
 			'events',
+			'menus',
 			//'filterable-gallery',
 		];
 
