@@ -133,8 +133,9 @@ function msshext_daily_menu_options() {
 
 	// add sub page
 	acf_add_options_sub_page( array(
-		'page_title' 	=> 'Nastavení jídelníčku',
-		'menu_title' 	=> 'Nastavení',
+		'page_title' 	=> 'Nastavení jídelníčků',
+		'menu_slug'		=> 'nastaveni-jidelnicku',
+		'menu_title' 	=> 'Nastavení jídelníčků',
 		'parent_slug' 	=> 'edit.php?post_type=msshext_daily_menu',
 	) );
 

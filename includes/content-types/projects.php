@@ -6,6 +6,9 @@
 add_action( 'init', 'msshext_register_cpt_project' );
 function msshext_register_cpt_project() {
 
+	$archive_id = get_field( 'msshext_projects_archive_page', 'options' );
+	$archive_url = msshext_get_relative_permalink( $archive_id );
+
 	$labels = array(
 		'name'               => _x( 'Projekty', 'post type general name', 'msshext' ),
 		'singular_name'      => _x( 'Projekt', 'post type singular name', 'msshext' ),
@@ -26,12 +29,16 @@ function msshext_register_cpt_project() {
 	$args = array(
 		'labels'             => $labels,
 		'description'        => __( 'Description.', 'msshext' ),
-		'public'             => false,
-		'publicly_queryable' => false,
+		'public'             => true,
+		'publicly_queryable' => true,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
-		'rewrite'            => array( 'slug' => 'event' ),
+		'with_front'		 => false,
+		'rewrite'            => array(
+			'slug'				=> $archive_url,
+			'with_front'		=> false,
+		),
 		'capability_type'    => 'post',
 		'has_archive'        => false,
 		'hierarchical'       => false,
@@ -40,5 +47,72 @@ function msshext_register_cpt_project() {
 	);
 
 	register_post_type( 'msshext_project', $args );
+
+}
+
+/**
+ * Add options page using ACF Pro.
+ */
+add_action( 'acf/init', 'msshext_project_options' );
+function msshext_project_options() {
+
+	if ( !function_exists('acf_add_options_page') )
+		return;
+
+	// add sub page
+	acf_add_options_sub_page( array(
+		'page_title' 	=> 'Nastavení projektů',
+		'menu_slug'		=> 'nastaveni-projektu',
+		'menu_title' 	=> 'Nastavení projektů',
+		'parent_slug' 	=> 'edit.php?post_type=msshext_project',
+	) );
+
+}
+
+/**
+ * Add missing links to breadcrumbs.
+ */
+add_filter( 'wpseo_breadcrumb_links', 'unbox_yoast_seo_breadcrumb_append_link' );
+function unbox_yoast_seo_breadcrumb_append_link( $links ) {
+
+	if ( !is_singular( 'msshext_project' ) )
+		return $links;
+
+	$new_links = array();
+	$total_links = count( $links );
+	$counter = 0;
+
+	foreach ( $links as $key => $val ) {
+
+		if ( $counter == $total_links - 1 ) {
+
+			if ( !empty( $val['id'] ) ) {
+
+				$archive_page_id = get_field( 'msshext_projects_archive_page', 'options' );
+				$archive_page = get_post( $archive_page_id );
+				$current_post = $archive_page;
+				$tmp_links = array();
+				$tmp_links[] = array( 'id' => $current_post->ID );
+
+				do {
+					if ( !empty( $current_post->post_parent ) ) {
+						$current_post = get_post( $current_post->post_parent );
+						$tmp_links[] = array( 'id' => $current_post->ID );
+					}
+				} while ( !empty( $current_post->post_parent > 0 ) );
+
+				$tmp_links = array_reverse( $tmp_links );
+				$new_links = array_merge( $new_links, $tmp_links );
+			}
+		}
+
+		$new_links[] = $val;
+
+		$counter++;
+	}
+
+	//error_log( '$new_links: ' . print_r( $new_links, true ) );
+
+	return $new_links;
 
 }

@@ -8,6 +8,15 @@
 	overflow: hidden;
 }
 
+.msshext-menu-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.msshext-menu-content-wrapper {
+	flex: 1;
+}
+
 .msshext-menu-content-wrapper .msshext-menu-food-line {
 	margin-bottom: 0;
 }
