@@ -71,7 +71,8 @@ function msshext_daily_menu_column_content( $column, $post_id ) {
 
 	if ( $column === 'content' ) {
 		echo '<strong>' . __( 'Přesnídávka:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_snack_1', $post_id ) . '<br />';
-		echo '<strong>' . __( 'Oběd:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_lunch', $post_id ) . '<br />';
+		echo '<strong>' . __( 'Polévka:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_soup', $post_id ) . '<br />';
+		echo '<strong>' . __( 'Hlavní jídlo:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_lunch', $post_id ) . '<br />';
 		echo '<strong>' . __( 'Svačina:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_snack_2', $post_id ) . '<br />';
 		echo '<strong>' . __( 'Pitný režim:', 'msshext' ) . '</strong> ' . get_field( 'msshext_daily_menu_drinks', $post_id ) . '<br />';
 	}
@@ -105,20 +106,48 @@ function msshext_daily_menu_columns_orderby( $query ) {
 	}
 }
 
-add_action( 'acf/save_post', 'msshext_daily_menu_update_title', 20 );
-function msshext_daily_menu_update_title( $post ) {
+//add_filter( 'wp_insert_post_data', 'msshext_daily_menu_update_title', 99, 1 );
+function msshext_daily_menu_update_title( $data ) {
 
-	$post = get_post( $post );
-	$date = date_i18n( 'l j. n.', strtotime( get_field( 'msshext_daily_menu_date', $post ) ) );
+	if ( empty( $_POST['post_type'] ) )
+		return $data;
 
-	// Make sure event post type is being saved
-	if ( !is_object( $post ) || $post->post_type != 'msshext_daily_menu' )
+	if ( $_POST['post_type'] !== 'msshext_daily_menu' )
+		return $data;
+
+	$date_key = msshext_get_acf_key( 'msshext_daily_menu_date' );
+	$date = date_i18n( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
+
+	$data['post_title'] = $date;
+	//$data['post_name'] = $_POST['acf'][$date_key];
+
+}
+
+// set daily rating title
+add_action( 'save_post', 'set_rating_title', 12 );
+function set_rating_title( $post_id ) {
+
+	if ( $post_id == null || empty( $_POST ) )
 		return;
 
-	if ( $post->post_title !== $date ) {
-		wp_update_post( array(
-			'post_title' => $date,
-		) );
+	if ( !isset( $_POST['post_type'] ) || $_POST['post_type'] != 'msshext_daily_menu' )
+		return;
+
+	if ( wp_is_post_revision( $post_id ) )
+		$post_id = wp_is_post_revision( $post_id );
+
+	global $post;
+
+	if ( empty( $post ) )
+		$post = get_post( $post_id );
+
+	$date_key = msshext_get_acf_key( 'msshext_daily_menu_date' );
+	$date = date_i18n( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
+
+	if ( $_POST['acf'][$date_key] != '' ) {
+		global $wpdb;
+		$where = array( 'ID' => $post_id );
+		$wpdb->update( $wpdb->posts, array( 'post_title' => $date ), $where );
 	}
 }
 

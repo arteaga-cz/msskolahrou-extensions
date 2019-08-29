@@ -111,8 +111,6 @@ function unbox_yoast_seo_breadcrumb_append_link( $links ) {
 		$counter++;
 	}
 
-	//error_log( '$new_links: ' . print_r( $new_links, true ) );
-
 	return $new_links;
 
 }

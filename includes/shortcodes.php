@@ -24,3 +24,11 @@ function msshext_shortcode_project_dates() {
 	return $start_date . ' - ' . $end_date;
 }
 
+add_shortcode( 'msshext_post_content', 'msshext_shortcode_post_content' );
+function msshext_shortcode_post_content() {
+	$post_id = get_the_ID();
+	$post = get_post( $post_id );
+
+	return apply_filters( 'the_content', $post->post_content );
+}
+

@@ -850,8 +850,11 @@ class Menus extends Widget_Base {
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_snack_1', get_the_ID() ) . '</p>';
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_snack_1_allergens', get_the_ID() ) . '</p>';
 
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Polévka', 'msshext' ) );
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_soup', get_the_ID() ) . '</p>';
+		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_soup_allergens', get_the_ID() ) . '</p>';
 
-		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Oběd', 'msshext' ) );
+		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['food_title_tag'], $this->get_render_attribute_string( 'food-type' ), __( 'Hlavní jídlo', 'msshext' ) );
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-list' ) . '>' . get_field( 'msshext_daily_menu_lunch', get_the_ID() ) . '</p>';
 		$html.= '<p ' . $this->get_render_attribute_string( 'food-allergens' ) . '>' . __( 'alergeny:', 'msshext' ) . ' ' . get_field( 'msshext_daily_menu_lunch_allergens', get_the_ID() ) . '</p>';
 
