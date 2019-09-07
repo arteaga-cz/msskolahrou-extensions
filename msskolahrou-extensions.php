@@ -10,7 +10,7 @@
  *
  * @link              https://www.arteaga.cz
  * @since             1.0.0
- * @package           MSSH
+ * @package           MSSHEXT
  *
  * @wordpress-plugin
  * Plugin Name:       MŠ Škola hrou extensions
