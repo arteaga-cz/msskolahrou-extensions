@@ -76,7 +76,7 @@ class Plugin {
 
 	private function includes() {
 		require_once MSSHEXT_INCLUDES_PATH . 'helpers.php';
-		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
+		require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/events.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/projects.php';
 		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/notifications.php';
@@ -84,6 +84,11 @@ class Plugin {
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/testimonials.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'shortcodes.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'elementor/modules-manager.php';
+
+		/**
+		 * Composer dependencies
+		 */
+		require FLCNIN_ABSPATH . 'vendor/autoload.php';
 
 		if ( is_admin() ) {
 			require_once MSSHEXT_INCLUDES_PATH . 'admin.php';

@@ -63,3 +63,37 @@ function msshext_get_acf_key( $field_name ) {
 
 	return $result;
 }
+
+/**
+ * Get scaled image path
+ *
+ * @since 1.0.0
+ * @see https://wordpress.stackexchange.com/questions/182477/wp-get-attachment-image-src-and-server-path
+ *
+ * @param  int $attachment_id        	WP attachment ID
+ * @param  string [$size = 'thumbnail'] Image size.
+ * @return boolean|string  False if no such image exists, otherwise the file path.
+ */
+function msshext_get_scaled_image_path( $attachment_id, $size = 'thumbnail' ) {
+
+	$file = get_attached_file( $attachment_id, true );
+
+	if ( !wp_attachment_is_image( $attachment_id ) ) {
+		return false; // the id is not referring to a media
+	}
+
+	if ( empty( $size ) || $size === 'full' ) {
+		// for the original size get_attached_file is fine
+		return realpath( $file );
+	}
+
+	$info = image_get_intermediate_size( $attachment_id, $size );
+
+	if ( !is_array( $info ) || !isset( $info['file'] ) ) {
+		return false; // probably a bad size argument
+	}
+
+	$realpath = realpath( str_replace( wp_basename( $file ), $info['file'], $file ) );
+
+	return $realpath;
+}

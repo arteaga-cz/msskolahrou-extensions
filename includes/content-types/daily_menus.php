@@ -26,14 +26,14 @@ function msshext_register_cpt_daily_menu() {
 	$args = array(
 		'labels'             => $labels,
 		'description'        => __( 'Description.', 'msshext' ),
-		'public'             => false,
-		'publicly_queryable' => false,
+		'public'             => true,
+		'publicly_queryable' => true,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
 		//'rewrite'            => array( 'slug' => 'daily_menu' ),
 		'capability_type'    => 'post',
-		'has_archive'        => false,
+		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_position'      => null,
 		'supports'           => array( 'author' ),
@@ -168,4 +168,112 @@ function msshext_daily_menu_options() {
 		'parent_slug' 	=> 'edit.php?post_type=msshext_daily_menu',
 	) );
 
+}
+
+/**
+ * Redirect single daily menu pages to entire week menu page.
+ */
+add_action( 'template_redirect', 'msshext_redirect_daily_menu_single' );
+function msshext_redirect_daily_menu_single() {
+
+	if ( !function_exists( 'get_field' ) )
+		return;
+
+	if ( !is_singular( 'msshext_daily_menu' ) )
+		return;
+
+	$menu_page_id = get_field( 'msshext_daily_menu_page', 'options' );
+	if ( empty( $menu_page_id ) || !is_numeric( $menu_page_id ) )
+		return;
+
+	wp_redirect( get_permalink( $menu_page_id ) );
+	die;
+
+}
+
+/**
+ * Create RSS description.
+ */
+add_filter( 'the_excerpt_rss', 'msshext_daily_menu_rss_description', 10, 1 );
+function msshext_daily_menu_rss_description( $output/*, $feed_type*/ ) {
+
+	global $post;
+	if ( $post->post_type !== 'msshext_daily_menu' )
+		return $output;
+
+	$new_content = __( 'Přesnídávka: ') . get_field( 'msshext_daily_menu_snack_1' ) . ' (' . get_field( 'msshext_daily_menu_snack_1_allergens' ) . ')' . ', <br>';
+	$new_content.= __( 'Oběd - polévka: ') . get_field( 'msshext_daily_menu_soup' ) . ' (' . get_field( 'msshext_daily_menu_soup_allergens' ) . ')' . ', <br>';
+	$new_content.= __( 'Oběd - hlavní jídlo: ') . get_field( 'msshext_daily_menu_lunch' ) . ' (' . get_field( 'msshext_daily_menu_lunch_allergens' ) . ')' . ', <br>';
+	$new_content.= __( 'Svačina: ') . get_field( 'msshext_daily_menu_snack_2' ) . ' (' . get_field( 'msshext_daily_menu_snack_2_allergens' ) . ')' . ', <br>';
+	$new_content.= __( 'Pitný režim: ') . get_field( 'msshext_daily_menu_drinks' ) . '<br>';
+
+	return $output = str_replace( ']]>', ']]&gt;', $new_content );;
+
+}
+
+
+function msshext_daily_menu_download( $week = 0 ) {
+
+	if ( empty( $_GET['msshext_action'] ) || $_GET['msshext_action'] != 'download_menu' )
+		return;
+
+	$menu_dimensions = array( 210, 297 );
+
+	$dpi = 300;
+
+	/**
+	 * Prepare invitation email view params.
+	 */
+	$view_params = array(
+		'menu_dimensions' 	=> $ticket_dimensions,
+		'title'				=> str_replace( "\n", '<br>', $ticket->title ),
+		'content'			=> str_replace( "\n", '<br>', $replaced_content->string ),
+		'content_after'		=> str_replace( "\n", '<br>', $replaced_content_after->string ),
+		'logo_path'			=> msshext_get_scaled_image_path( $invitation->get_logo_id(), $size = 'ticket-logo' ),
+		'code'				=> $ticket->code,
+		'dpi'				=> $dpi,
+	);
+
+	$html = msshext_get_menu_view( $view_params, true );
+
+	//echo $html;
+	//die;
+
+	$defaultConfig = ( new Mpdf\Config\ConfigVariables() )->getDefaults();
+	$fontDirs = $defaultConfig['fontDir'];
+
+	$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+	$fontData = $defaultFontConfig['fontdata'];
+
+	$mpdf = new \Mpdf\Mpdf( array(
+		'fontDir' 		=> array_merge($fontDirs, [
+			FLCNIN_ABSPATH . '/public/fonts',
+		]),
+		'fontdata' 		=> $fontData + [
+			'myriadprobold' => [
+				'R' 		=> 'MyriadPro-Bold.ttf',
+			],
+			'myriadprosemibold' => [
+				'R' 		=> 'MyriadPro-Semibold.ttf',
+			]
+		],
+		'default_font' 	=> 'myriadprobold',
+		'mode' 			=> 'utf-8',
+		'format' 		=> $ticket_dimensions,
+		'margin_left' 	=> 0,
+		'margin_right' 	=> 0,
+		'margin_top' 	=> 0,
+		'margin_bottom' => 0,
+		'margin_header' => 0,
+		'margin_footer' => 0,
+		'autoPageBreak'	=> false,
+		'img_dpi' 		=> $dpi
+	) );
+	$mpdf->WriteHTML( $html );
+
+	$filename = 'jidelnicek-' . $ticket->code . '.pdf';
+
+	$mpdf->Output( $filename, 'D' );
+
+	exit;
 }
