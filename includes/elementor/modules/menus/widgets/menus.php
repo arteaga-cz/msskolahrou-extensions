@@ -920,34 +920,11 @@ class Menus extends Widget_Base {
 	protected function render_no_posts_message() {
 		$settings = $this->get_settings_for_display();
 		$this->add_render_attribute( 'no_posts_message', 'class', 'msshext-no-posts-message' );
-		echo $html.= sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
+		echo sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
 	}
 
 	public function get_formatted_date( $date, $new_format ) {
-		$date = date( 'Y-m-d', strtotime( $date ) );
-
-		$today = new \DateTime(); // This object represents current date/time
-		$today->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
-
-		$match_date = new \DateTime( $date );
-		$match_date->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
-
-		$diff = $today->diff( $match_date );
-		$diffDays = (integer)$diff->format( "%R%a" ); // Extract days count in interval
-
-		switch ( $diffDays ) {
-			case 0:
-				return mb_strtoupper( __( 'Dnes', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
-				break;
-			case -1:
-				return mb_strtoupper( __( 'Včera', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
-				break;
-			case +1:
-				return mb_strtoupper( __( 'Zítra', 'msshext' ) ) . ' - ' . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
-				break;
-			default:
-				return date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
-		}
+		return msshext_get_formatted_date( $date, $new_format );
 	}
 
 }

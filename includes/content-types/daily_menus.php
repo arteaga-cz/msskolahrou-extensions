@@ -211,11 +211,22 @@ function msshext_daily_menu_rss_description( $output/*, $feed_type*/ ) {
 
 }
 
+add_action( 'template_redirect', 'msshext_daily_menu_download' );
+function msshext_daily_menu_download() {
 
-function msshext_daily_menu_download( $week = 0 ) {
+	if ( !function_exists('get_field') )
+		return;
 
 	if ( empty( $_GET['msshext_action'] ) || $_GET['msshext_action'] != 'download_menu' )
 		return;
+
+	if ( !isset( $_GET['week'] ) )
+		return;
+
+	$week = intval( $_GET['week'] );
+
+	$week_start_end = msshext_get_week_start_end( $week );
+	$menus = msshext_get_daily_menus_by_week( $week );
 
 	$menu_dimensions = array( 210, 297 );
 
@@ -225,19 +236,22 @@ function msshext_daily_menu_download( $week = 0 ) {
 	 * Prepare invitation email view params.
 	 */
 	$view_params = array(
-		'menu_dimensions' 	=> $ticket_dimensions,
-		'title'				=> str_replace( "\n", '<br>', $ticket->title ),
-		'content'			=> str_replace( "\n", '<br>', $replaced_content->string ),
-		'content_after'		=> str_replace( "\n", '<br>', $replaced_content_after->string ),
-		'logo_path'			=> msshext_get_scaled_image_path( $invitation->get_logo_id(), $size = 'ticket-logo' ),
-		'code'				=> $ticket->code,
+		'menu_dimensions' 	=> $menu_dimensions,
+		'title'				=> __( 'Jídelníček', 'msshext' ),
+		'header_logo_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_logo', 'options' ), $size = 'full' ),
+		'header_image_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_image', 'options' ), $size = 'full' ),
+		'header_content'	=> get_field( 'msshext_daily_menu_pdf_header', 'options' ),
+		'date_from'			=> date_i18n( 'j. n.', $week_start_end['start'] ),
+		'date_to'			=> date_i18n( 'j. n.', $week_start_end['end'] ),
+		'menus'				=> $menus,
+		'footer_content'	=> get_field( 'msshext_daily_menu_pdf_footer', 'options' ),
 		'dpi'				=> $dpi,
 	);
 
-	$html = msshext_get_menu_view( $view_params, true );
+	$html = msshext_get_view( 'files', 'daily_menu', $view_params, true );
 
-	//echo $html;
-	//die;
+	/*echo $html;
+	die;*/
 
 	$defaultConfig = ( new Mpdf\Config\ConfigVariables() )->getDefaults();
 	$fontDirs = $defaultConfig['fontDir'];
@@ -246,7 +260,7 @@ function msshext_daily_menu_download( $week = 0 ) {
 	$fontData = $defaultFontConfig['fontdata'];
 
 	$mpdf = new \Mpdf\Mpdf( array(
-		'fontDir' 		=> array_merge($fontDirs, [
+		/*'fontDir' 		=> array_merge($fontDirs, [
 			FLCNIN_ABSPATH . '/public/fonts',
 		]),
 		'fontdata' 		=> $fontData + [
@@ -257,9 +271,9 @@ function msshext_daily_menu_download( $week = 0 ) {
 				'R' 		=> 'MyriadPro-Semibold.ttf',
 			]
 		],
-		'default_font' 	=> 'myriadprobold',
+		'default_font' 	=> 'myriadprobold',*/
 		'mode' 			=> 'utf-8',
-		'format' 		=> $ticket_dimensions,
+		'format' 		=> $menu_dimensions,
 		'margin_left' 	=> 0,
 		'margin_right' 	=> 0,
 		'margin_top' 	=> 0,
@@ -271,9 +285,104 @@ function msshext_daily_menu_download( $week = 0 ) {
 	) );
 	$mpdf->WriteHTML( $html );
 
-	$filename = 'jidelnicek-' . $ticket->code . '.pdf';
+	$filename = 'jidelnicek.pdf';
 
 	$mpdf->Output( $filename, 'D' );
 
 	exit;
+}
+
+function msshext_get_daily_menus( $date_from, $date_to ) {
+
+	$date_from = date_i18n( 'Ymd', strtotime( $date_from ) );
+	$date_to = date_i18n( 'Ymd', strtotime( $date_to ) );
+
+	$daily_menu_args = array(
+		'post_type'		=> 'msshext_daily_menu',
+		'posts_per_page'=> -1,
+		'meta_query'	=> array(
+			'relation' 	=> 'AND',
+			'date_from_clause'	=> array(
+				'key'		=> 'msshext_daily_menu_date',
+				'compare'	=> '>=',
+				'value'		=> $date_from,
+			),
+			'date_to_clause'	=> array(
+				'key'		=> 'msshext_daily_menu_date',
+				'compare'	=> '<=',
+				'value'		=> $date_to,
+			),
+		),
+		'orderby'		=> array(
+			'date_from_clause' 	=> 'ASC',
+		)
+	);
+
+	$daily_menus = get_posts( $daily_menu_args );
+	$daily_menus_full = array();
+
+	foreach ( $daily_menus as $post ) {
+
+		$daily_menus_full[ get_field( 'msshext_daily_menu_date', $post->ID ) ] = array(
+			'date_raw' 		=> get_field( 'msshext_daily_menu_date', $post->ID ),
+			'date_display'	=> msshext_get_formatted_date( get_field( 'msshext_daily_menu_date', $post->ID ), 'j. n.', false ),
+			'day_name'		=> msshext_get_formatted_date( get_field( 'msshext_daily_menu_date', $post->ID ), 'l', false ),
+			'food'			=> array(
+				'snack_1'				=> get_field( 'msshext_daily_menu_snack_1', $post->ID ),
+				'snack_1_allergens'		=> get_field( 'msshext_daily_menu_snack_1_allergens', $post->ID ),
+				'soup'					=> get_field( 'msshext_daily_menu_soup', $post->ID ),
+				'soup_allergens'		=> get_field( 'msshext_daily_menu_soup_allergens', $post->ID ),
+				'lunch'					=> get_field( 'msshext_daily_menu_lunch', $post->ID ),
+				'lunch_allergens'		=> get_field( 'msshext_daily_menu_lunch_allergens', $post->ID ),
+				'snack_2'				=> get_field( 'msshext_daily_menu_snack_2', $post->ID ),
+				'snack_2_allergens'		=> get_field( 'msshext_daily_menu_snack_2_allergens', $post->ID ),
+				'drinks'				=> get_field( 'msshext_daily_menu_drinks', $post->ID ),
+			),
+		);
+	}
+
+	return $daily_menus_full;
+
+}
+
+/**
+ * Get daily menu items by week instead of dates.
+ *
+ * @param numetic [$week = 0] Current week = 0, next = +1, last = -1 etc.
+ * @return array Daily menu array. @see msshext_get_daily_menus.
+ */
+function msshext_get_daily_menus_by_week( $week = 0 ) {
+
+	$week = intval( $week );
+
+	if ( $week > 0 )
+		$week = '+'.$week;
+
+	if ( $week < 0 )
+		$week = '-'.$week;
+
+	$target_weekday = strtotime( $week . ' week' );
+
+	$start_end = get_weekstartend( date_i18n( 'Y-m-d', $target_weekday ) );
+
+	return msshext_get_daily_menus( date_i18n( 'Y-m-d', $start_end['start'] ), date_i18n( 'Y-m-d', $start_end['end'] ) );
+
+}
+
+function msshext_get_week_start_end( $week = 0 ) {
+
+	$week = intval( $week );
+
+	if ( $week > 0 )
+		$week = '+'.$week;
+
+	if ( $week < 0 )
+		$week = '-'.$week;
+
+	$target_weekday = strtotime( $week . ' week' );
+
+	$start_end = get_weekstartend( date_i18n( 'Y-m-d', $target_weekday ) );
+
+	return $start_end;
+
 }

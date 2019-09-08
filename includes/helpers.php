@@ -97,3 +97,98 @@ function msshext_get_scaled_image_path( $attachment_id, $size = 'thumbnail' ) {
 
 	return $realpath;
 }
+
+/**
+ * Get template parts from views folder
+ *
+ * @param string    $slug
+ * @param string    $name
+ * @param boolean   $return
+ * @return object
+ */
+function msshext_get_view( $slug, $name = '', $view_params = array(), $return = false ) {
+
+	if ( $return ) {
+		ob_start();
+		msshext_get_template_part( 'views/' . $slug . '/' . $name, $view_params );
+
+		return ob_get_clean();
+	}
+	else {
+		msshext_get_template_part( 'views/' . $slug . '/' . $name, $view_params );
+	}
+}
+
+/**
+ * Like get_template_part() lets you pass args to the template file
+ * Args are available in the template as $view_params array
+ * @param string filepart
+ * @param mixed wp_args style argument list
+ *
+ * @since       1.0.0
+ * @version 	1.0.0
+ */
+function msshext_get_template_part( $file, $view_params = array() ) {
+
+	if ( file_exists( get_stylesheet_directory() . '/' . $file . '.php' ) ) {
+
+		$file_path = ( get_stylesheet_directory() . '/' . $file . '.php' );
+
+	} elseif ( file_exists( get_template_directory() . '/' . $file . '.php' ) ) {
+
+		$file_path = realpath( get_template_directory() . '/' . $file . '.php' );
+
+	} elseif ( file_exists( MSSHEXT_PATH . $file . '.php' ) ) {
+
+		$file_path = realpath( MSSHEXT_PATH . $file . '.php' );
+
+	} else {
+
+		//return false;
+
+	}
+
+	$view_params = wp_parse_args( $view_params );
+
+	if ( empty( $file_path ) )
+		return false;
+
+	ob_start();
+	include( $file_path );
+	$output = ob_get_clean();
+
+	echo $output;
+}
+
+function msshext_get_formatted_date( $date, $new_format, $show_prefix = true ) {
+
+	$prefix = '';
+	$date = date( 'Y-m-d', strtotime( $date ) );
+
+	$today = new \DateTime(); // This object represents current date/time
+	$today->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
+
+	$match_date = new \DateTime( $date );
+	$match_date->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
+
+	if ( $show_prefix ) {
+
+		$diff = $today->diff( $match_date );
+		$diffDays = (integer)$diff->format( "%R%a" ); // Extract days count in interval
+
+		switch ( $diffDays ) {
+			case 0:
+				$prefix = mb_strtoupper( __( 'Dnes', 'msshext' ) ) . ' - ';
+				break;
+			case -1:
+				$prefix = mb_strtoupper( __( 'Včera', 'msshext' ) ) . ' - ';
+				break;
+			case +1:
+				$prefix = mb_strtoupper( __( 'Zítra', 'msshext' ) ) . ' - ';
+				break;
+		}
+
+	}
+
+	return $prefix . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
+}

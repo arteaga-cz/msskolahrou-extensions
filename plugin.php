@@ -88,7 +88,7 @@ class Plugin {
 		/**
 		 * Composer dependencies
 		 */
-		require FLCNIN_ABSPATH . 'vendor/autoload.php';
+		require_once MSSHEXT_PATH . 'vendor/autoload.php';
 
 		if ( is_admin() ) {
 			require_once MSSHEXT_INCLUDES_PATH . 'admin.php';
