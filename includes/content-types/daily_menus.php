@@ -227,6 +227,18 @@ function msshext_daily_menu_download() {
 
 	$week_start_end = msshext_get_week_start_end( $week );
 	$menus = msshext_get_daily_menus_by_week( $week );
+	$start_date = null;
+	$end_date = null;
+
+	$menu_counter = 0;
+	foreach ( $menus as $menu ) {
+		if ( $menu_counter == 0 )
+			$start_date = $menu['date_raw'];
+
+		$end_date = $menu['date_raw'];
+
+		$menu_counter++;
+	}
 
 	$menu_dimensions = array( 210, 297 );
 
@@ -241,8 +253,8 @@ function msshext_daily_menu_download() {
 		'header_logo_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_logo', 'options' ), $size = 'full' ),
 		'header_image_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_image', 'options' ), $size = 'full' ),
 		'header_content'	=> get_field( 'msshext_daily_menu_pdf_header', 'options' ),
-		'date_from'			=> date_i18n( 'j. n.', $week_start_end['start'] ),
-		'date_to'			=> date_i18n( 'j. n.', $week_start_end['end'] ),
+		'date_from'			=> date_i18n( 'j. n.', strtotime($start_date) ),
+		'date_to'			=> date_i18n( 'j. n.', strtotime($end_date) ),
 		'menus'				=> $menus,
 		'footer_content'	=> get_field( 'msshext_daily_menu_pdf_footer', 'options' ),
 		'dpi'				=> $dpi,

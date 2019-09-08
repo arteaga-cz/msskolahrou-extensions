@@ -98,6 +98,8 @@ module.exports = function (grunt) {
 					{src: ['assets/**'], dest: '/'}, // includes files in path and its subdirs
 					{src: ['includes/**'], dest: '/'}, // includes files in path and its subdirs
 					{src: ['languages/**'], dest: '/'}, // includes files in path and its subdirs
+					{src: ['views/**'], dest: '/'}, // includes files in path and its subdirs
+					{src: ['vendor/**'], dest: '/'}, // includes files in path and its subdirs
 					//{src: ['public/**', '!public/**/*.js', '!public/**/*.css', 'public/**/*.min.js', 'public/**/*.min.css'], dest: '/'}, // includes files in path and its subdirs
 					{src: ['*.php'], dest: '/'}, // includes root PHP files
 					{src: ['*.css'], dest: '/'}, // includes root CSS files
