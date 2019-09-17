@@ -9,7 +9,7 @@ function msshext_register_cpt_event() {
 	$labels = array(
 		'name'               => _x( 'Události', 'post type general name', 'msshext' ),
 		'singular_name'      => _x( 'Událost', 'post type singular name', 'msshext' ),
-		'menu_name'          => _x( 'Události', 'admin menu', 'msshext' ),
+		'menu_name'          => _x( 'Akce / Události', 'admin menu', 'msshext' ),
 		'name_admin_bar'     => _x( 'Událost', 'add new on admin bar', 'msshext' ),
 		'add_new'            => _x( 'Přidat událost', 'book', 'msshext' ),
 		'add_new_item'       => __( 'Přidat událost', 'msshext' ),
@@ -32,6 +32,7 @@ function msshext_register_cpt_event() {
 		'show_in_menu'       => true,
 		'query_var'          => true,
 		'rewrite'            => array( 'slug' => 'event' ),
+		'show_in_rest' 		 => true,
 		'capability_type'    => 'post',
 		'has_archive'        => false,
 		'hierarchical'       => false,

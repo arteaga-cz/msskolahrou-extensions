@@ -9,11 +9,11 @@ function msshext_register_cpt_testimonial() {
 	$labels = array(
 		'name'               => _x( 'Citace', 'post type general name', 'msshext' ),
 		'singular_name'      => _x( 'Citace', 'post type singular name', 'msshext' ),
-		'menu_name'          => _x( 'Citace', 'admin menu', 'msshext' ),
+		'menu_name'          => _x( 'Co o nás říkají', 'admin menu', 'msshext' ),
 		'name_admin_bar'     => _x( 'Citace', 'add new on admin bar', 'msshext' ),
 		'add_new'            => _x( 'Přidat citaci', 'book', 'msshext' ),
 		'add_new_item'       => __( 'Přidat citaci', 'msshext' ),
-		'new_item'           => __( 'Nov8 citace', 'msshext' ),
+		'new_item'           => __( 'Nová citace', 'msshext' ),
 		'edit_item'          => __( 'Upravit citaci', 'msshext' ),
 		'view_item'          => __( 'Zobrazit citaci', 'msshext' ),
 		'all_items'          => __( 'Všechny citace', 'msshext' ),

@@ -76,7 +76,7 @@ class Plugin {
 
 	private function includes() {
 		require_once MSSHEXT_INCLUDES_PATH . 'helpers.php';
-		require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
+		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/events.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/projects.php';
 		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/notifications.php';
