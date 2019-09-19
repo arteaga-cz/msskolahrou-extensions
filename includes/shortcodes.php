@@ -32,3 +32,21 @@ function msshext_shortcode_post_content() {
 	return apply_filters( 'the_content', $post->post_content );
 }
 
+add_shortcode( 'msshext_event_date_start', 'msshext_shortcode_event_date_start' );
+function msshext_shortcode_event_date_start() {
+	$post_id = get_the_ID();
+
+	$start_date = date_i18n( 'j. n. Y',  strtotime( get_field( 'mssh_event_date_start', $post_id ) ) );
+
+	return $start_date;
+}
+
+add_shortcode( 'msshext_event_time_start', 'msshext_shortcode_event_time_start' );
+function msshext_shortcode_event_time_start() {
+	$post_id = get_the_ID();
+
+	$start_time = date_i18n( 'G:i',  strtotime( get_field( 'mssh_event_date_start', $post_id ) . ' ' . get_field( 'mssh_event_time_start', $post_id ) ) );
+
+	return $start_time;
+}
+

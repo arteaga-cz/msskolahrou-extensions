@@ -24,3 +24,7 @@
 .msshext-menu-info-content p:last-child {
 	margin-bottom: 0;
 }
+
+.msshext-event-time {
+	font-size: 0.8em;
+}

@@ -184,8 +184,6 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 					)
 				);
 
-				error_log( '$class_pages: ' . print_r( $class_pages, true ) );
-
 				if ( !empty( $class_pages[0] ) ) {
 					$new_links[] = array( 'id' => $class_pages[0]->ID );
 				}

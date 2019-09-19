@@ -1210,7 +1210,11 @@ class Events extends Widget_Base {
 
 		$html.= '<div class="msshext-event-timing msshext-column">' . PHP_EOL;
 
-		$html.= date_i18n( $settings['date_format'],  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) ) );
+		$html.= '<span class="msshext-event-date">' . date_i18n( $settings['date_format'],  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) ) ) . '</span>';
+
+		if ( !empty( get_field( 'mssh_event_time_start', get_the_ID() ) ) ) {
+			$html.= '<br /><span class="msshext-event-time">' . date_i18n( 'G:i',  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) . ' ' . get_field( 'mssh_event_time_start', get_the_ID() ) ) ) . '</span>';
+		}
 
 		$html.= '</div>';
 
@@ -1258,7 +1262,7 @@ class Events extends Widget_Base {
 	protected function render_no_posts_message() {
 		$settings = $this->get_settings_for_display();
 		$this->add_render_attribute( 'no_posts_message', 'class', 'msshext-no-posts-message' );
-		echo $html.= sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
+		echo sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
 	}
 
 	/**
