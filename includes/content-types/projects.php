@@ -72,8 +72,8 @@ function msshext_project_options() {
 /**
  * Add missing links to breadcrumbs.
  */
-add_filter( 'wpseo_breadcrumb_links', 'unbox_yoast_seo_breadcrumb_append_link' );
-function unbox_yoast_seo_breadcrumb_append_link( $links ) {
+add_filter( 'wpseo_breadcrumb_links', 'msshext_yoast_seo_breadcrumb_append_link_projects' );
+function msshext_yoast_seo_breadcrumb_append_link_projects( $links ) {
 
 	if ( !is_singular( 'msshext_project' ) )
 		return $links;
@@ -114,6 +114,93 @@ function unbox_yoast_seo_breadcrumb_append_link( $links ) {
 	return $new_links;
 
 }
+
+/**
+ * Add missing links to breadcrumbs.
+ */
+add_filter( 'wpseo_breadcrumb_links', 'msshext_yoast_seo_breadcrumb_append_link_event' );
+function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
+
+	if ( !is_singular( 'msshext_event' ) )
+		return $links;
+
+	$new_links = array();
+	$total_links = count( $links );
+	$counter = 0;
+
+	foreach ( $links as $key => $val ) {
+
+		if ( $counter == $total_links - 1 ) {
+
+			if ( !empty( $val['id'] ) ) {
+
+				$archive_page_id = get_field( 'msshext_classes_dashboard_page', 'options' );
+				$archive_page = get_post( $archive_page_id );
+				$current_post = $archive_page;
+				$tmp_links = array();
+				$tmp_links[] = array( 'id' => $current_post->ID );
+
+				/**
+				 * Add breadcrumbs for classes dashboard page and it's parents.
+				 */
+				do {
+					if ( !empty( $current_post->post_parent ) ) {
+						$current_post = get_post( $current_post->post_parent );
+						$tmp_links[] = array( 'id' => $current_post->ID );
+					}
+				} while ( !empty( $current_post->post_parent > 0 ) );
+
+				$tmp_links = array_reverse( $tmp_links );
+				$new_links = array_merge( $new_links, $tmp_links );
+
+
+				/**
+				 * Add current class breadcrumb.
+				 */
+				$current_event = get_the_ID();
+				$current_event_terms = wp_get_post_terms( $current_event, 'category' );
+				$class_term_id = null;
+
+				foreach ( $current_event_terms as $term ) {
+					$is_class = get_field( 'msshext_is_class', $term );
+					if ( !empty( $is_class ) ) {
+						$class_term_id = $term->term_id;
+						break;
+					}
+				}
+
+				$class_pages = get_posts(
+					array(
+						'post_type' 		=> 'page',
+						'poasts_per_page'	=> 1,
+						'post_parent'		=> $archive_page_id,
+						'tax_query'			=> array(
+							array(
+								'taxonomy' => 'category',
+								'field'    => 'term_id',
+								'terms'    => $class_term_id,
+							)
+						)
+					)
+				);
+
+				error_log( '$class_pages: ' . print_r( $class_pages, true ) );
+
+				if ( !empty( $class_pages[0] ) ) {
+					$new_links[] = array( 'id' => $class_pages[0]->ID );
+				}
+			}
+		}
+
+		$new_links[] = $val;
+
+		$counter++;
+	}
+
+	return $new_links;
+
+}
+
 /**
  * Register project type taxonomy.
  */

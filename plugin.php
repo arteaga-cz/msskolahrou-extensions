@@ -77,6 +77,7 @@ class Plugin {
 	private function includes() {
 		require_once MSSHEXT_INCLUDES_PATH . 'helpers.php';
 		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/employees.php';
+		require_once MSSHEXT_INCLUDES_PATH . 'content-types/pages.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/events.php';
 		require_once MSSHEXT_INCLUDES_PATH . 'content-types/projects.php';
 		//require_once MSSHEXT_INCLUDES_PATH . 'content-types/notifications.php';
@@ -195,7 +196,43 @@ class Plugin {
 		$document->update_meta( '_msshext_version', MSSHEXT_VERSION );
 	}
 
-	private function setup_hooks() {
+	public function wp_init_hooks() {
+		register_taxonomy_for_object_type( 'category', 'page' );
+	}
+
+	/**
+	 * Add color scheme class to <body> based on page meta or term meta.
+	 *
+	 * @param  array $classes Array of classes.
+	 * @return array Modified array of classes.
+	 */
+	public function body_color_scheme_class( $classes ) {
+
+		if ( !function_exists('get_field') )
+			return $classes;
+
+		if ( is_singular() ) {
+
+			$post_id = get_the_ID();
+			$color_scheme = get_field( 'msshext_color_scheme' );
+
+			$terms = wp_get_post_terms( $post_id, 'category' );
+			foreach ( $terms as $term ) {
+				$term_color_scheme = get_term_meta( $term->term_id, 'msshext_color_scheme', true );
+				if ( !empty( $term_color_scheme ) )
+					$color_scheme = $term_color_scheme;
+			}
+
+			if ( !empty( $color_scheme ) ) {
+				$classes[] = 'color-scheme-'.$color_scheme;
+			}
+		}
+
+		return $classes;
+
+	}
+
+	private function register_actions_and_filters() {
 		add_action( 'elementor/init', [ $this, 'on_elementor_init' ] );
 
 		add_action( 'elementor/frontend/before_register_scripts', [ $this, 'register_frontend_scripts' ] );
@@ -204,6 +241,10 @@ class Plugin {
 		add_action( 'elementor/frontend/after_enqueue_styles', [ $this, 'enqueue_frontend_styles' ] );
 
 		add_action( 'elementor/document/save_version', [ $this, 'on_document_save_version' ] );
+
+		add_action( 'init', [ $this, 'wp_init_hooks' ] );
+
+		add_filter( 'body_class', [ $this, 'body_color_scheme_class' ] );
 	}
 
 	/**
@@ -219,11 +260,12 @@ class Plugin {
 
 		$this->includes();
 
-		$this->setup_hooks();
+		$this->register_actions_and_filters();
 
 		if ( is_admin() ) {
 			$this->admin = new Admin();
 		}
+
 	}
 
 	final public static function get_title() {

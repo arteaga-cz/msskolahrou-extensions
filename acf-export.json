@@ -1,12 +1,80 @@
 [
     {
-        "key": "group_5d6ced8215f2c",
-        "title": "Barevné schéma stránky",
+        "key": "group_5d839ea9966b3",
+        "title": "Nastavení stránek tříd",
         "fields": [
+            {
+                "key": "field_5d839ebdcc7d1",
+                "label": "Stránka společné nástěnky tříd",
+                "name": "msshext_classes_dashboard_page",
+                "type": "post_object",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "page"
+                ],
+                "taxonomy": "",
+                "allow_null": 0,
+                "multiple": 0,
+                "return_format": "id",
+                "ui": 1
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "options_page",
+                    "operator": "==",
+                    "value": "nastaveni-stranek"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": ""
+    },
+    {
+        "key": "group_5d6ced8215f2c",
+        "title": "Nastavení třídy",
+        "fields": [
+            {
+                "key": "field_5d828872b78ed",
+                "label": "Jedná se o třídu?",
+                "name": "msshext_is_class",
+                "type": "checkbox",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "1": "Ano"
+                },
+                "allow_custom": 0,
+                "default_value": [],
+                "layout": "vertical",
+                "toggle": 0,
+                "return_format": "value",
+                "save_custom": 0
+            },
             {
                 "key": "field_5d6ced91b2781",
                 "label": "Vyberte barevnost",
-                "name": "mssh_color_scheme",
+                "name": "msshext_color_scheme",
                 "type": "select",
                 "instructions": "",
                 "required": 0,
@@ -37,9 +105,9 @@
         "location": [
             [
                 {
-                    "param": "post_type",
+                    "param": "taxonomy",
                     "operator": "==",
-                    "value": "page"
+                    "value": "category"
                 }
             ]
         ],
