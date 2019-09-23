@@ -1122,6 +1122,8 @@ class Events extends Widget_Base {
 			}
 			if ( $settings['timeframe'] == 'past' ) {
 				$args['meta_query']['date_start_clause']['compare'] = '<';
+				$args['orderby']['date_start_clause'] = 'DESC';
+				$args['orderby']['time_start_clause'] = 'DESC';
 			}
 		}
 
