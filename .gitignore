@@ -1,0 +1,36 @@
+# Composer
+vendor/
+
+# System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+
+# Sass
+.sass-cache/
+assets/.sass-cache/
+
+# Bower
+bower_components/
+public/system/lib/
+.bower-cache/
+.bower-registry/
+.bower-tmp/
+.tmp/
+
+# Build files
+msskolahrou-extensions.zip
+dist/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
