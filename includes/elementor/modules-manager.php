@@ -1,7 +1,7 @@
 <?php
 namespace MSSHEXT\Elementor;
 
-use ElementorPro\Base\Module_Base;
+use MSSHEXT\Elementor\Base\Module_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -17,7 +17,7 @@ final class Modules_Manager {
 		$modules = [
 			// Modules with Widgets.
 			//'advanced-image-box',
-			//'forms',
+			'forms',
 			'events',
 			'menus',
 			//'filterable-gallery',

@@ -116,7 +116,7 @@ function msshext_daily_menu_update_title( $data ) {
 		return $data;
 
 	$date_key = msshext_get_acf_key( 'msshext_daily_menu_date' );
-	$date = date_i18n( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
+	$date = wp_date( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
 
 	$data['post_title'] = $date;
 	//$data['post_name'] = $_POST['acf'][$date_key];
@@ -142,7 +142,7 @@ function set_rating_title( $post_id ) {
 		$post = get_post( $post_id );
 
 	$date_key = msshext_get_acf_key( 'msshext_daily_menu_date' );
-	$date = date_i18n( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
+	$date = wp_date( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
 
 	if ( $_POST['acf'][$date_key] != '' ) {
 		global $wpdb;
@@ -253,8 +253,8 @@ function msshext_daily_menu_download() {
 		'header_logo_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_logo', 'options' ), $size = 'full' ),
 		'header_image_path'	=> msshext_get_scaled_image_path( get_field( 'msshext_daily_menu_pdf_header_image', 'options' ), $size = 'full' ),
 		'header_content'	=> get_field( 'msshext_daily_menu_pdf_header', 'options' ),
-		'date_from'			=> date_i18n( 'j. n.', strtotime($start_date) ),
-		'date_to'			=> date_i18n( 'j. n.', strtotime($end_date) ),
+		'date_from'			=> wp_date( 'j. n.', strtotime($start_date) ),
+		'date_to'			=> wp_date( 'j. n.', strtotime($end_date) ),
 		'menus'				=> $menus,
 		'footer_content'	=> get_field( 'msshext_daily_menu_pdf_footer', 'options' ),
 		'dpi'				=> $dpi,
@@ -306,8 +306,8 @@ function msshext_daily_menu_download() {
 
 function msshext_get_daily_menus( $date_from, $date_to ) {
 
-	$date_from = date_i18n( 'Ymd', strtotime( $date_from ) );
-	$date_to = date_i18n( 'Ymd', strtotime( $date_to ) );
+	$date_from = wp_date( 'Ymd', strtotime( $date_from ) );
+	$date_to = wp_date( 'Ymd', strtotime( $date_to ) );
 
 	$daily_menu_args = array(
 		'post_type'		=> 'msshext_daily_menu',
@@ -375,9 +375,9 @@ function msshext_get_daily_menus_by_week( $week = 0 ) {
 
 	$target_weekday = strtotime( $week . ' week' );
 
-	$start_end = get_weekstartend( date_i18n( 'Y-m-d', $target_weekday ) );
+	$start_end = get_weekstartend( wp_date( 'Y-m-d', $target_weekday ) );
 
-	return msshext_get_daily_menus( date_i18n( 'Y-m-d', $start_end['start'] ), date_i18n( 'Y-m-d', $start_end['end'] ) );
+	return msshext_get_daily_menus( wp_date( 'Y-m-d', $start_end['start'] ), wp_date( 'Y-m-d', $start_end['end'] ) );
 
 }
 
@@ -393,7 +393,7 @@ function msshext_get_week_start_end( $week = 0 ) {
 
 	$target_weekday = strtotime( $week . ' week' );
 
-	$start_end = get_weekstartend( date_i18n( 'Y-m-d', $target_weekday ) );
+	$start_end = get_weekstartend( wp_date( 'Y-m-d', $target_weekday ) );
 
 	return $start_end;
 

@@ -22,7 +22,17 @@ class Dynamic_Select extends Field_Base {
 
 	public function __construct() {
 		parent::__construct();
-		add_action( 'elementor/preview/init', [ $this, 'editor_inline_JS' ] ); //TODO Move to separate JS file.
+		add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueue_editor_scripts' ] );
+	}
+
+	public function enqueue_editor_scripts() {
+		wp_enqueue_script(
+			'msshext-admin-dynamic-select',
+			MSSHEXT_ASSETS_URL . 'js/admin-dynamic-select.js',
+			[ 'elementor-editor' ],
+			MSSHEXT_VERSION,
+			true
+		);
 	}
 
 	public function get_type() {
@@ -30,7 +40,7 @@ class Dynamic_Select extends Field_Base {
 	}
 
 	public function get_name() {
-		return __( 'Dynamic Select', 'elementor-pro' );
+		return esc_html__( 'Dynamic Select', 'msshext' );
 	}
 
 	public function render( $item, $item_index, $form ) {
@@ -167,7 +177,7 @@ class Dynamic_Select extends Field_Base {
 	 */
 	public function update_controls( $widget ) {
 
-		$elementor = Plugin::elementor();
+		$elementor = \Elementor\Plugin::instance();
 
 		$control_data = $elementor->controls_manager->get_control_from_stack( $widget->get_unique_name(), 'form_fields' );
 
@@ -265,67 +275,6 @@ class Dynamic_Select extends Field_Base {
 
 		$control_data['fields'] = $this->inject_field_controls( $control_data['fields'], $field_controls );
 		$widget->update_control( 'form_fields', $control_data );
-	}
-
-	public function editor_inline_JS() {
-
-		add_action( 'wp_footer', function() { //TODO Move to .js file and use elementor/editor/before_enqueue_scripts hook.
-			?>
-			<script>
-				var ElementorFormDynamicSelectField  = ElementorFormDynamicSelectField  || {};
-				jQuery( document ).ready( function( $ ) {
-					"use strict";
-
-					ElementorFormDynamicSelectField = {
-
-						onReady: function( callback ) {
-						}, //TODO Refactor
-
-						renderField: function( inputField, item, i, settings ) {
-							var itemClasses = item.css_classes,
-								required = '',
-								fieldName = 'form_field_',
-								fieldHtml = '<div class="elementor-field elementor-select-wrapper ">';
-
-							if ( item.required ) {
-								required = 'required';
-							}
-
-							fieldHtml += '<select class="elementor-field-textual elementor-field ' + itemClasses + ' elementor-size-' + settings.input_size + '" name="' + fieldName + '" id="form_field_' + i + '" ' + required + '>';
-							fieldHtml += '<option>Option 1</option>';
-							fieldHtml += '<option>Option 2</option>';
-							fieldHtml += '</select>';
-							fieldHtml += '</div>';
-
-							return fieldHtml;
-						},
-
-						init: function () {
-							elementor.hooks.addFilter( 'elementor_pro/forms/content_template/field/dynamic_select', ElementorFormDynamicSelectField.renderField, 10, 4 );
-						}
-					};
-
-					ElementorFormDynamicSelectField.init();
-
-				} );
-			</script>
-			<?php
-		} );
-	}
-
-	public function validation( $field, Classes\Form_Record $record, Classes\Ajax_Handler $ajax_handler ) {
-
-		/*error_log( '$field: ' . print_r( $field, true ) );
-		error_log( '$record: ' . print_r( $record, true ) );
-		error_log( '$ajax_handler: ' . print_r( $ajax_handler, true ) );*/
-
-		/*if ( ! empty( $field['field_max'] ) && $field['field_max'] < (int) $field['value'] ) {
-			$ajax_handler->add_error( $field['id'], sprintf( __( 'The value must be less than or equal to %s', 'elementor-pro' ), $field['field_max'] ) );
-		}
-
-		if ( ! empty( $field['field_min'] ) && $field['field_min'] > (int) $field['value'] ) {
-			$ajax_handler->add_error( $field['id'], sprintf( __( 'The value must be greater than or equal %s', 'elementor-pro' ), $field['field_min'] ) );
-		}*/
 	}
 
 	public function sanitize_field( $value, $field ) {

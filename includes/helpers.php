@@ -44,20 +44,28 @@ function msshext_get_relative_permalink( $var, $remove_slashes = true ) {
 }
 
 function msshext_has_elementor( $post_id ) {
+	if ( did_action( 'elementor/loaded' ) ) {
+		return \Elementor\Plugin::$instance->db->is_built_with_elementor( $post_id );
+	}
 	return ! ! get_post_meta( $post_id, '_elementor_edit_mode', true );
 }
 
 function msshext_get_acf_key( $field_name ) {
 
+	if ( function_exists( 'acf_get_field' ) ) {
+		$field = acf_get_field( $field_name );
+		if ( $field && isset( $field['key'] ) ) {
+			return $field['key'];
+		}
+	}
+
 	global $wpdb;
 
-	$length = strlen( $field_name );
-
-	$sql = "
+	$sql = $wpdb->prepare( "
 			SELECT post_name
 			FROM {$wpdb->posts}
-			WHERE post_type='acf-field' AND post_excerpt='{$field_name}'
-			";
+			WHERE post_type='acf-field' AND post_excerpt=%s
+			", $field_name );
 
 	$result = $wpdb->get_var( $sql );
 
@@ -163,7 +171,7 @@ function msshext_get_template_part( $file, $view_params = array() ) {
 function msshext_get_formatted_date( $date, $new_format, $show_prefix = true ) {
 
 	$prefix = '';
-	$date = date( 'Y-m-d', strtotime( $date ) );
+	$date = wp_date( 'Y-m-d', strtotime( $date ) );
 
 	$today = new \DateTime(); // This object represents current date/time
 	$today->setTime( 0, 0, 0 ); // reset time part, to prevent partial comparison
@@ -190,5 +198,5 @@ function msshext_get_formatted_date( $date, $new_format, $show_prefix = true ) {
 
 	}
 
-	return $prefix . date_i18n( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
+	return $prefix . wp_date( $new_format, strtotime( $match_date->format( 'Y-m-d' ) ) );
 }

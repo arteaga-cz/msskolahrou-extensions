@@ -252,7 +252,7 @@ class Plugin {
 	 */
 	private function __construct() {
 
-		if ( ! is_plugin_active( 'elementor-pro/elementor-pro.php' ) ) {
+		if ( ! did_action( 'elementor/loaded' ) ) {
 			return;
 		}
 

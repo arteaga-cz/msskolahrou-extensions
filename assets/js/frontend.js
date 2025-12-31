@@ -1,28 +1,38 @@
-(function($) {
-	window.isEditMode = false;
-
-	$(window).on("elementor/frontend/init", function() {
-		window.isEditMode = elementorFrontend.isEditMode();
-	});
-})(jQuery);
-
-var msshextExpandableEvents = function($scope, $) {
-	if (!isEditMode) {
-		var $events = $(".elementor-widget-msshext-events", $scope);
-
-		// Load more button
-		$scope.on("click", ".elementor-button-wrapper .msshext-events-show-all", function(e) {
-			e.preventDefault();
-			console.log('click');
-			$(this).remove();
-			$scope.find('.msshext-events-hidden').removeClass('msshext-events-hidden');
-		});
+class msshextExpandableEvents extends elementorModules.frontend.handlers.Base {
+	getDefaultSettings() {
+		return {
+			selectors: {
+				button: '.msshext-events-show-all',
+				hiddenItems: '.msshext-events-hidden',
+			},
+		};
 	}
-};
 
-jQuery(window).on("elementor/frontend/init", function() {
-	elementorFrontend.hooks.addAction(
-		"frontend/element_ready/msshext-events.default",
-		msshextExpandableEvents
-	);
+	getDefaultElements() {
+		const selectors = this.getSettings('selectors');
+		return {
+			$button: this.$element.find(selectors.button),
+			$hiddenItems: this.$element.find(selectors.hiddenItems),
+		};
+	}
+
+	bindEvents() {
+		this.elements.$button.on('click', this.onButtonClick.bind(this));
+	}
+
+	onButtonClick(event) {
+		event.preventDefault();
+		this.elements.$button.remove();
+		this.elements.$hiddenItems.removeClass('msshext-events-hidden');
+	}
+}
+
+jQuery(window).on('elementor/frontend/init', () => {
+	const addHandler = ($element) => {
+		elementorFrontend.elementsHandler.addHandler(msshextExpandableEvents, {
+			$element,
+		});
+	};
+
+	elementorFrontend.hooks.addAction('frontend/element_ready/msshext-events.default', addHandler);
 });

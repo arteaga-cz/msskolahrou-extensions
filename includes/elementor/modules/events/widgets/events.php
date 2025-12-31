@@ -6,13 +6,13 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Text_Shadow;
-use Elementor\Scheme_Color;
+use Elementor\Core\Schemes\Color as Scheme_Color;
 use Elementor\Icons_Manager;
-use Elementor\Scheme_Typography;
+use Elementor\Core\Schemes\Typography as Scheme_Typography;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
-//use ElementorPro\Modules\QueryControl\Module as Module_Query;
+use ElementorPro\Modules\QueryControl\Module as Module_Query;
 //use ElementorPro\Modules\QueryControl\Controls\Group_Control_Related;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -123,7 +123,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		/**
 		 * Content - EVENTS
@@ -132,7 +132,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_events',
 			[
-				'label' => __( 'Events', 'msshext' ),
+				'label' => esc_html__( 'Events', 'msshext' ),
 			]
 		);
 
@@ -160,23 +160,23 @@ class Events extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Alignment', 'msshext' ),
+				'label' => esc_html__( 'Alignment', 'msshext' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => esc_html__( 'Left', 'msshext' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => esc_html__( 'Center', 'msshext' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => esc_html__( 'Right', 'msshext' ),
 						'icon' => 'eicon-text-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'elementor' ),
+						'title' => esc_html__( 'Justified', 'msshext' ),
 						'icon' => 'eicon-text-align-justify',
 					],
 				],
@@ -188,7 +188,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'date_format',
 			[
-				'label' => __( 'Event Date Format', 'elementor' ),
+				'label' => esc_html__( 'Event Date Format', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => 'j. n.',
 			]
@@ -197,7 +197,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label' => __( 'Title HTML Tag', 'elementor' ),
+				'label' => esc_html__( 'Title HTML Tag', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -224,7 +224,7 @@ class Events extends Widget_Base {
 		$this->add_responsive_control(
 			'_timing_col_inline_size',
 			[
-				'label' => __( 'Date Column Width', 'msshext' ) . ' (%)',
+				'label' => esc_html__( 'Date Column Width', 'msshext' ) . ' (%)',
 				'type' => Controls_Manager::NUMBER,
 				'min' => 2,
 				'max' => 100,
@@ -252,7 +252,7 @@ class Events extends Widget_Base {
 		$this->add_responsive_control(
 			'_desc_col_inline_size',
 			[
-				'label' => __( 'Content Column Width', 'msshext' ) . ' (%)',
+				'label' => esc_html__( 'Content Column Width', 'msshext' ) . ' (%)',
 				'type' => Controls_Manager::NUMBER,
 				'min' => 2,
 				'max' => 100,
@@ -287,7 +287,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'group_by_month',
 			[
-				'label' => __( 'Seskupit podle měsíce', 'msshext' ),
+				'label' => esc_html__( 'Seskupit podle měsíce', 'msshext' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => '',
 			]
@@ -296,7 +296,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'month_tag',
 			[
-				'label' => __( 'Month HTML Tag', 'elementor' ),
+				'label' => esc_html__( 'Month HTML Tag', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -309,7 +309,7 @@ class Events extends Widget_Base {
 					'span' => 'span',
 					'p' => 'p',
 				],
-				'default' => 'h ',
+				'default' => 'h3',
 				'condition' => [
 					'group_by_month' => 'yes',
 				],
@@ -326,16 +326,16 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'readmore_text',
 			[
-				'label' => __( 'Read More link text', 'msshext' ),
+				'label' => esc_html__( 'Read More link text', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'Více informací'),
+				'default' => esc_html__( 'Více informací', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'readmore_selected_icon',
 			[
-				'label' => __( 'Read More Icon', 'elementor' ),
+				'label' => esc_html__( 'Read More Icon', 'msshext' ),
 				'type' => Controls_Manager::ICONS,
 				'label_block' => true,
 				'fa4compatibility' => 'icon',
@@ -345,12 +345,12 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'readmore_icon_align',
 			[
-				'label' => __( 'Read More Icon Position', 'elementor' ),
+				'label' => esc_html__( 'Read More Icon Position', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'left',
 				'options' => [
-					'left' => __( 'Before', 'elementor' ),
-					'right' => __( 'After', 'elementor' ),
+					'left' => esc_html__( 'Before', 'msshext' ),
+					'right' => esc_html__( 'After', 'msshext' ),
 				],
 				'condition' => [
 					'readmore_selected_icon[value]!' => '',
@@ -361,7 +361,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'readmore_icon_indent',
 			[
-				'label' => __( 'Icon Spacing', 'elementor' ),
+				'label' => esc_html__( 'Icon Spacing', 'msshext' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -385,7 +385,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label' => __( 'Category' ),
+				'label' => esc_html__( 'Category', 'msshext' ),
 				'type' => Controls_Manager::SELECT2,
 				'label_block' => true,
 				'default' => [],
@@ -401,12 +401,12 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'terms_relation',
 			[
-				'label' => __( 'Terms Relation', 'msshext' ),
+				'label' => esc_html__( 'Terms Relation', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'OR',
 				'options' => [
-					'OR' => __( 'OR', 'msshext' ),
-					'AND' => __( 'AND', 'msshext' ),
+					'OR' => esc_html__( 'OR', 'msshext' ),
+					'AND' => esc_html__( 'AND', 'msshext' ),
 				],
 			]
 		);
@@ -414,13 +414,13 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'timeframe',
 			[
-				'label' => __( 'Timeframe', 'msshext' ),
+				'label' => esc_html__( 'Timeframe', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'all',
 				'options' => [
-					'all' => __( 'All', 'msshext' ),
-					'future' => __( 'Future', 'msshext' ),
-					'past' => __( 'Past', 'msshext' ),
+					'all' => esc_html__( 'All', 'msshext' ),
+					'future' => esc_html__( 'Future', 'msshext' ),
+					'past' => esc_html__( 'Past', 'msshext' ),
 				],
 			]
 		);
@@ -435,9 +435,9 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'no_posts_message',
 			[
-				'label' => __( 'No posts found message', 'msshext' ),
+				'label' => esc_html__( 'No posts found message', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'Zatím žádné události.'),
+				'default' => esc_html__( 'Zatím žádné události.', 'msshext' ),
 			]
 		);
 
@@ -450,22 +450,22 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_button',
 			[
-				'label' => __( 'Button', 'elementor' ),
+				'label' => esc_html__( 'Button', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'button_type',
 			[
-				'label' => __( 'Type', 'elementor' ),
+				'label' => esc_html__( 'Type', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => [
-					'' => __( 'Default', 'elementor' ),
-					'info' => __( 'Info', 'elementor' ),
-					'success' => __( 'Success', 'elementor' ),
-					'warning' => __( 'Warning', 'elementor' ),
-					'danger' => __( 'Danger', 'elementor' ),
+					'' => esc_html__( 'Default', 'msshext' ),
+					'info' => esc_html__( 'Info', 'msshext' ),
+					'success' => esc_html__( 'Success', 'msshext' ),
+					'warning' => esc_html__( 'Warning', 'msshext' ),
+					'danger' => esc_html__( 'Danger', 'msshext' ),
 				],
 				'prefix_class' => 'elementor-button-',
 			]
@@ -474,25 +474,25 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_text',
 			[
-				'label' => __( 'Text', 'elementor' ),
+				'label' => esc_html__( 'Text', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'Click here', 'elementor' ),
-				'placeholder' => __( 'Click here', 'elementor' ),
+				'default' => esc_html__( 'Click here', 'msshext' ),
+				'placeholder' => esc_html__( 'Click here', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'button_link',
 			[
-				'label' => __( 'Link', 'elementor' ),
+				'label' => esc_html__( 'Link', 'msshext' ),
 				'type' => Controls_Manager::URL,
 				'dynamic' => [
 					'active' => true,
 				],
-				'placeholder' => __( 'https://your-link.com', 'elementor' ),
+				'placeholder' => esc_html__( 'https://your-link.com', 'msshext' ),
 				'default' => [
 					'url' => '#',
 				],
@@ -502,19 +502,19 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_align',
 			[
-				'label' => __( 'Alignment', 'elementor' ),
+				'label' => esc_html__( 'Alignment', 'msshext' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => esc_html__( 'Left', 'msshext' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => esc_html__( 'Center', 'msshext' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => esc_html__( 'Right', 'msshext' ),
 						'icon' => 'eicon-text-align-right',
 					],
 				],
@@ -526,7 +526,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_size',
 			[
-				'label' => __( 'Size', 'elementor' ),
+				'label' => esc_html__( 'Size', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'sm',
 				'options' => self::get_button_sizes(),
@@ -537,7 +537,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_selected_icon',
 			[
-				'label' => __( 'Icon', 'elementor' ),
+				'label' => esc_html__( 'Icon', 'msshext' ),
 				'type' => Controls_Manager::ICONS,
 				'label_block' => true,
 				'fa4compatibility' => 'icon',
@@ -547,12 +547,12 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_icon_align',
 			[
-				'label' => __( 'Icon Position', 'elementor' ),
+				'label' => esc_html__( 'Icon Position', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'left',
 				'options' => [
-					'left' => __( 'Before', 'elementor' ),
-					'right' => __( 'After', 'elementor' ),
+					'left' => esc_html__( 'Before', 'msshext' ),
+					'right' => esc_html__( 'After', 'msshext' ),
 				],
 				'condition' => [
 					'button_selected_icon[value]!' => '',
@@ -563,7 +563,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_icon_indent',
 			[
-				'label' => __( 'Icon Spacing', 'elementor' ),
+				'label' => esc_html__( 'Icon Spacing', 'msshext' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -580,7 +580,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_view',
 			[
-				'label' => __( 'View', 'elementor' ),
+				'label' => esc_html__( 'View', 'msshext' ),
 				'type' => Controls_Manager::HIDDEN,
 				'default' => 'traditional',
 			]
@@ -589,15 +589,15 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_css_id',
 			[
-				'label' => __( 'Button ID', 'elementor' ),
+				'label' => esc_html__( 'Button ID', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
 				'default' => '',
-				'title' => __( 'Add your custom id WITHOUT the Pound key. e.g: my-id', 'elementor' ),
+				'title' => esc_html__( 'Add your custom id WITHOUT the Pound key. e.g: my-id', 'msshext' ),
 				'label_block' => false,
-				'description' => __( 'Please make sure the ID is unique and not used elsewhere on the page this form is displayed. This field allows <code>A-z 0-9</code> & underscore chars without spaces.', 'elementor' ),
+				'description' => esc_html__( 'Please make sure the ID is unique and not used elsewhere on the page this form is displayed. This field allows <code>A-z 0-9</code> & underscore chars without spaces.', 'msshext' ),
 				'separator' => 'before',
 
 			]
@@ -612,7 +612,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_event_card',
 			[
-				'label' => __( 'Event card', 'msshext' ),
+				'label' => esc_html__( 'Event card', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -620,7 +620,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'event_card_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -644,7 +644,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'event_card_radius',
 			[
-				'label' => __( 'Border Radius', 'msshext' ),
+				'label' => esc_html__( 'Border Radius', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -656,7 +656,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'event_card_margin',
 			[
-				'label' => __( 'Card Margin', 'msshext' ),
+				'label' => esc_html__( 'Card Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -668,7 +668,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'event_card_date_col_padding',
 			[
-				'label' => __( 'Date Column Padding', 'elementor' ),
+				'label' => esc_html__( 'Date Column Padding', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -680,7 +680,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'event_card_desc_col_padding',
 			[
-				'label' => __( 'Desc. Column Padding', 'elementor' ),
+				'label' => esc_html__( 'Desc. Column Padding', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -702,7 +702,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_event_date',
 			[
-				'label' => __( 'Event date', 'msshext' ),
+				'label' => esc_html__( 'Event date', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -710,7 +710,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'date_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -735,7 +735,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'date_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-timing' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -748,7 +748,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_event_title',
 			[
-				'label' => __( 'Event title', 'msshext' ),
+				'label' => esc_html__( 'Event title', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -756,7 +756,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'title_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -781,7 +781,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'title_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -794,7 +794,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_event_excerpt',
 			[
-				'label' => __( 'Event content', 'msshext' ),
+				'label' => esc_html__( 'Event content', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -802,7 +802,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'excerpt_color',
 			[
-				'label' => __( 'Text Color', 'msshext' ),
+				'label' => esc_html__( 'Text Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -827,7 +827,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'excerpt_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-excerpt' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -840,7 +840,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_readmore_style',
 			[
-				'label' => __( 'Read More', 'elementor' ),
+				'label' => esc_html__( 'Read More', 'msshext' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -867,14 +867,14 @@ class Events extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_readmore_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => esc_html__( 'Normal', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'readmore_text_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => esc_html__( 'Text Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -888,14 +888,14 @@ class Events extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_readmore_hover',
 			[
-				'label' => __( 'Hover', 'elementor' ),
+				'label' => esc_html__( 'Hover', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'readmore_hover_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => esc_html__( 'Text Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.msshext-event-readmore:hover, {{WRAPPER}} .msshext-event-readmore:hover, {{WRAPPER}} a.msshext-event-readmore:focus, {{WRAPPER}} .msshext-event-readmore:focus' => 'color: {{VALUE}};',
@@ -913,7 +913,7 @@ class Events extends Widget_Base {
 		$this->start_controls_section(
 			'section_button_style',
 			[
-				'label' => __( 'Button', 'elementor' ),
+				'label' => esc_html__( 'Button', 'msshext' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -940,14 +940,14 @@ class Events extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => esc_html__( 'Normal', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'button_text_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => esc_html__( 'Text Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -959,7 +959,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -976,14 +976,14 @@ class Events extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			[
-				'label' => __( 'Hover', 'elementor' ),
+				'label' => esc_html__( 'Hover', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'button_hover_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => esc_html__( 'Text Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover, {{WRAPPER}} a.elementor-button:focus, {{WRAPPER}} .elementor-button:focus' => 'color: {{VALUE}};',
@@ -995,7 +995,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_background_hover_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover, {{WRAPPER}} a.elementor-button:focus, {{WRAPPER}} .elementor-button:focus' => 'background-color: {{VALUE}};',
@@ -1006,7 +1006,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_hover_border_color',
 			[
-				'label' => __( 'Border Color', 'elementor' ),
+				'label' => esc_html__( 'Border Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'condition' => [
 					'border_border!' => '',
@@ -1020,7 +1020,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_hover_animation',
 			[
-				'label' => __( 'Hover Animation', 'elementor' ),
+				'label' => esc_html__( 'Hover Animation', 'msshext' ),
 				'type' => Controls_Manager::HOVER_ANIMATION,
 			]
 		);
@@ -1041,7 +1041,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'button_border_radius',
 			[
-				'label' => __( 'Border Radius', 'elementor' ),
+				'label' => esc_html__( 'Border Radius', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -1061,7 +1061,7 @@ class Events extends Widget_Base {
 		$this->add_responsive_control(
 			'button_text_padding',
 			[
-				'label' => __( 'Padding', 'elementor' ),
+				'label' => esc_html__( 'Padding', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -1080,8 +1080,10 @@ class Events extends Widget_Base {
 
 	public function query_posts() {
 
+		$settings = $this->get_settings_for_display();
+
 		$query_args = [
-			'posts_per_page' => $this->get_settings( 'posts_per_page' ),
+			'posts_per_page' => $settings['posts_per_page'],
 		];
 
 		/** @var Module_Query $elementor_query */
@@ -1097,7 +1099,7 @@ class Events extends Widget_Base {
 
 		$args = array(
 			'post_type'		=> 'msshext_event',
-			'posts_per_page'=> $this->get_settings( 'posts_per_page' ),
+			'posts_per_page'=> $settings['posts_per_page'],
 			'meta_query'	=> array(
 				'relation' 	=> 'AND',
 				'date_start_clause' => array(
@@ -1116,7 +1118,7 @@ class Events extends Widget_Base {
 		);
 
 		if ( !empty( $settings['timeframe'] ) && $settings['timeframe'] !== 'all' ) {
-			$args['meta_query']['date_start_clause']['value'] = date( 'Ymd' );
+			$args['meta_query']['date_start_clause']['value'] = wp_date( 'Ymd' );
 			if ( $settings['timeframe'] == 'future' ) {
 				$args['meta_query']['date_start_clause']['compare'] = '>=';
 			}
@@ -1157,7 +1159,7 @@ class Events extends Widget_Base {
 			}
 
 			if ( !empty( $settings['month_tag'] ) && $settings['group_by_month'] == 'yes' ) {
-				$new_month = date_i18n( 'F',  strtotime( get_field( 'mssh_event_date_start', $post->ID ) ) );
+				$new_month = wp_date( 'F',  strtotime( get_field( 'mssh_event_date_start', $post->ID ) ) );
 				if ( $new_month !== $month ) {
 					$month = $new_month;
 					$this->render_month( $month );
@@ -1212,10 +1214,10 @@ class Events extends Widget_Base {
 
 		$html.= '<div class="msshext-event-timing msshext-column">' . PHP_EOL;
 
-		$html.= '<span class="msshext-event-date">' . date_i18n( $settings['date_format'],  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) ) ) . '</span>';
+		$html.= '<span class="msshext-event-date">' . wp_date( $settings['date_format'],  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) ) ) . '</span>';
 
 		if ( !empty( get_field( 'mssh_event_time_start', get_the_ID() ) ) ) {
-			$html.= '<br /><span class="msshext-event-time">' . date_i18n( 'G:i',  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) . ' ' . get_field( 'mssh_event_time_start', get_the_ID() ) ) ) . '</span>';
+			$html.= '<br /><span class="msshext-event-time">' . wp_date( 'G:i',  strtotime( get_field( 'mssh_event_date_start', get_the_ID() ) . ' ' . get_field( 'mssh_event_time_start', get_the_ID() ) ) ) . '</span>';
 		}
 
 		$html.= '</div>';
@@ -1280,11 +1282,11 @@ class Events extends Widget_Base {
 	 */
 	public static function get_button_sizes() {
 		return [
-			'xs' => __( 'Extra Small', 'elementor' ),
-			'sm' => __( 'Small', 'elementor' ),
-			'md' => __( 'Medium', 'elementor' ),
-			'lg' => __( 'Large', 'elementor' ),
-			'xl' => __( 'Extra Large', 'elementor' ),
+			'xs' => esc_html__( 'Extra Small', 'msshext' ),
+			'sm' => esc_html__( 'Small', 'msshext' ),
+			'md' => esc_html__( 'Medium', 'msshext' ),
+			'lg' => esc_html__( 'Large', 'msshext' ),
+			'xl' => esc_html__( 'Extra Large', 'msshext' ),
 		];
 	}
 
@@ -1357,7 +1359,7 @@ class Events extends Widget_Base {
 			// @todo: remove when deprecated
 			// added as bc in 2.6
 			//old default
-			$settings['button_icon_align'] = $this->get_settings( 'button_icon_align' );
+			$settings['button_icon_align'] = $this->get_settings_for_display( 'button_icon_align' );
 		}
 
 		$this->add_render_attribute( [
@@ -1443,7 +1445,7 @@ class Events extends Widget_Base {
 			// @todo: remove when deprecated
 			// added as bc in 2.6
 			//old default
-			$settings['readmore_icon_align'] = $this->get_settings( 'readmore_icon_align' );
+			$settings['readmore_icon_align'] = $this->get_settings_for_display( 'readmore_icon_align' );
 		}
 
 		$this->add_render_attribute( [
@@ -1464,8 +1466,8 @@ class Events extends Widget_Base {
 		//$this->add_inline_editing_attributes( 'text', 'none' );
 				?>
 				<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
-					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['button_selected_icon']['value'] ) ) : ?>
-					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?> rel="icon">
+					<?php if ( ! empty( $settings['readmore_icon'] ) || ! empty( $settings['readmore_selected_icon']['value'] ) ) : ?>
+					<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
 						<?php if ( $is_new || $migrated ) :
 		Icons_Manager::render_icon( $settings['readmore_selected_icon'], [ 'aria-hidden' => 'true' ] );
 		else : ?>
@@ -1486,7 +1488,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function _content_template2() {
+	protected function content_template() {
 ?>
 <#
    var html = '<div class="elementor-event-wrapper msshext-advanced-event-wrapper">';

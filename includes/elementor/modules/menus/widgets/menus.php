@@ -6,9 +6,9 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Text_Shadow;
-use Elementor\Scheme_Color;
+use Elementor\Core\Schemes\Color as Scheme_Color;
 use Elementor\Icons_Manager;
-use Elementor\Scheme_Typography;
+use Elementor\Core\Schemes\Typography as Scheme_Typography;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
@@ -123,7 +123,7 @@ class Menus extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		/**
 		 * Content - MENUS
@@ -132,7 +132,7 @@ class Menus extends Widget_Base {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => __( 'Karty', 'msshext' ),
+				'label' => esc_html__( 'Karty', 'msshext' ),
 			]
 		);
 
@@ -149,7 +149,7 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'columns',
 			[
-				'label' => __( 'Sloupce', 'msshext' ),
+				'label' => esc_html__( 'Sloupce', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '3',
 				'tablet_default' => '2',
@@ -173,23 +173,23 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Zarovnání obsahu', 'msshext' ),
+				'label' => esc_html__( 'Zarovnání obsahu', 'msshext' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => esc_html__( 'Left', 'msshext' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => esc_html__( 'Center', 'msshext' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => esc_html__( 'Right', 'msshext' ),
 						'icon' => 'eicon-text-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'elementor' ),
+						'title' => esc_html__( 'Justified', 'msshext' ),
 						'icon' => 'eicon-text-align-justify',
 					],
 				],
@@ -201,7 +201,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_format',
 			[
-				'label' => __( 'Formát data', 'msshext' ),
+				'label' => esc_html__( 'Formát data', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => 'l j. n.',
 			]
@@ -210,7 +210,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_tag',
 			[
-				'label' => __( 'HTML tag data', 'msshext' ),
+				'label' => esc_html__( 'HTML tag data', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -230,7 +230,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_title_tag',
 			[
-				'label' => __( 'HTML Tag nadpisu položky', 'elementor' ),
+				'label' => esc_html__( 'HTML Tag nadpisu položky', 'msshext' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -257,16 +257,16 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'no_posts_message',
 			[
-				'label' => __( 'No posts found message', 'msshext' ),
+				'label' => esc_html__( 'No posts found message', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'Zatím žádné události.'),
+				'default' => esc_html__( 'Zatím žádné události.', 'msshext' ),
 			]
 		);
 
 		$this->add_control(
 			'show_general_info',
 			[
-				'label' => __( 'Zobrazit obecné informace', 'msshext' ),
+				'label' => esc_html__( 'Zobrazit obecné informace', 'msshext' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => '',
 			]
@@ -281,7 +281,7 @@ class Menus extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_menu_card',
 			[
-				'label' => __( 'Karta', 'msshext' ),
+				'label' => esc_html__( 'Karta', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -289,7 +289,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_card_style',
 			[
-				'label' => __( 'Vzhled karty', 'msshext' ),
+				'label' => esc_html__( 'Vzhled karty', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => false,
 			]
@@ -298,7 +298,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'column_gap',
 			[
-				'label' => __( 'Columns Gap', 'elementor-pro' ),
+				'label' => esc_html__( 'Columns Gap', 'msshext' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -317,7 +317,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'row_gap',
 			[
-				'label' => __( 'Rows Gap', 'elementor-pro' ),
+				'label' => esc_html__( 'Rows Gap', 'msshext' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -336,7 +336,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_card_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -360,7 +360,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_card_radius',
 			[
-				'label' => __( 'Border Radius', 'msshext' ),
+				'label' => esc_html__( 'Border Radius', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -372,7 +372,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_card_margin',
 			[
-				'label' => __( 'Card Margin', 'msshext' ),
+				'label' => esc_html__( 'Card Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -384,7 +384,7 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'menu_card_padding',
 			[
-				'label' => __( 'Padding', 'elementor' ),
+				'label' => esc_html__( 'Padding', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -404,7 +404,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_card_date',
 			[
-				'label' => __( 'Vzhled data', 'msshext' ),
+				'label' => esc_html__( 'Vzhled data', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -413,7 +413,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -438,7 +438,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'date_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -456,7 +456,7 @@ class Menus extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_menu_inner',
 			[
-				'label' => __( 'Vnitřek karty', 'msshext' ),
+				'label' => esc_html__( 'Vnitřek karty', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -464,7 +464,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -488,7 +488,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_radius',
 			[
-				'label' => __( 'Border Radius', 'msshext' ),
+				'label' => esc_html__( 'Border Radius', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -500,7 +500,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_margin',
 			[
-				'label' => __( 'Card Margin', 'msshext' ),
+				'label' => esc_html__( 'Card Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -512,7 +512,7 @@ class Menus extends Widget_Base {
 		$this->add_responsive_control(
 			'menu_inner_padding',
 			[
-				'label' => __( 'Padding', 'elementor' ),
+				'label' => esc_html__( 'Padding', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -532,7 +532,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_headings',
 			[
-				'label' => __( 'Vzhled nadpisů', 'msshext' ),
+				'label' => esc_html__( 'Vzhled nadpisů', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -541,7 +541,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_title_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -566,7 +566,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_title_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -578,7 +578,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_foods',
 			[
-				'label' => __( 'Vzhled jídel', 'msshext' ),
+				'label' => esc_html__( 'Vzhled jídel', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -587,7 +587,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_content_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -612,7 +612,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_content_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -624,7 +624,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'menu_inner_allergens',
 			[
-				'label' => __( 'Vzhled alergenů', 'msshext' ),
+				'label' => esc_html__( 'Vzhled alergenů', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -633,7 +633,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_allergens_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -658,7 +658,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'food_allergens_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => esc_html__( 'Margin', 'msshext' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', 'em', '%' ],
 				'selectors' => [
@@ -676,7 +676,7 @@ class Menus extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_menu_info',
 			[
-				'label' => __( 'Infokarta', 'msshext' ),
+				'label' => esc_html__( 'Infokarta', 'msshext' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -684,7 +684,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'infocard_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -708,7 +708,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'infocard_date',
 			[
-				'label' => __( 'Vzhled nadpisu', 'msshext' ),
+				'label' => esc_html__( 'Vzhled nadpisu', 'msshext' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -717,7 +717,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'infocard_heading_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => esc_html__( 'Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -742,7 +742,7 @@ class Menus extends Widget_Base {
 		$this->add_control(
 			'infocard_inner_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => esc_html__( 'Background Color', 'msshext' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -775,13 +775,13 @@ class Menus extends Widget_Base {
 
 		$args = array(
 			'post_type'		=> 'msshext_daily_menu',
-			'posts_per_page'=> $this->get_settings( 'posts_per_page' ),
+			'posts_per_page'=> $settings['posts_per_page'],
 			'meta_query'	=> array(
 				'relation' 	=> 'AND',
 				'date_clause'	=> array(
 					'key'		=> 'msshext_daily_menu_date',
 					'compare'	=> '>=',
-					'value'		=> date( 'Ymd' ),
+					'value'		=> wp_date( 'Ymd' ),
 				),
 			),
 			'orderby'		=> array(

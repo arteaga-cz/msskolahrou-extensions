@@ -57,7 +57,7 @@ class Better_Redirect extends Action_Base {
 		$widget->start_controls_section(
 			'section_better_redirect',
 			[
-				'label' => __( 'Better Redirect', 'wmpup-elementor' ),
+				'label' => esc_html__( 'Better Redirect', 'msshext' ),
 				'condition' => [
 					'submit_actions' => $this->get_name(),
 				],
@@ -67,16 +67,11 @@ class Better_Redirect extends Action_Base {
 		$widget->add_control(
 			'better_redirect_to',
 			[
-				'label' => __( 'Redirect To', 'elementor-pro' ),
+				'label' => esc_html__( 'Redirect To', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'placeholder' => __( 'https://your-link.com', 'elementor-pro' ),
+				'placeholder' => esc_html__( 'https://your-link.com', 'msshext' ),
 				'dynamic' => [
 					'active' => true,
-					'categories' => [
-						TagsModule::POST_META_CATEGORY,
-						TagsModule::TEXT_CATEGORY,
-						TagsModule::URL_CATEGORY,
-					],
 				],
 				'label_block' => true,
 				'render_type' => 'none',

@@ -172,7 +172,7 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 				$class_pages = get_posts(
 					array(
 						'post_type' 		=> 'page',
-						'poasts_per_page'	=> 1,
+						'posts_per_page'	=> 1,
 						'post_parent'		=> $archive_page_id,
 						'tax_query'			=> array(
 							array(

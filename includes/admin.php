@@ -16,8 +16,7 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_styles' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
-		add_filter( 'plugin_action_links_' . ELEMENTOR_PLUGIN_BASE, [ $this, 'plugin_action_links' ], 50 );
-		add_filter( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
+		add_filter( 'plugin_action_links_' . MSSHEXT_PLUGIN_BASE, [ $this, 'plugin_action_links' ] );
 
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_element_categories' ) );
 	}
@@ -34,13 +33,13 @@ class Admin {
 		$direction_suffix = is_rtl() ? '-rtl' : '';
 
 		wp_register_style(
-			'elementor-pro-admin',
+			'msshext-admin',
 			MSSHEXT_ASSETS_URL . 'css/admin' . $direction_suffix . $suffix . '.css',
 			[],
 			MSSHEXT_VERSION
 		);
 
-		wp_enqueue_style( 'elementor-pro-admin' );
+		wp_enqueue_style( 'msshext-admin' );
 	}
 
 	public function enqueue_scripts() {
@@ -74,29 +73,24 @@ class Admin {
 	}
 
 	public function plugin_action_links( $links ) {
+		$settings_link = '<a href="edit.php?post_type=msshext_daily_menu&page=nastaveni-jidelnicku">' . __( 'Settings', 'msshext' ) . '</a>';
+		array_unshift( $links, $settings_link );
+
 		return $links;
-	}
-
-	public function plugin_row_meta( $plugin_meta, $plugin_file ) {
-		if ( MSSHEXT_PLUGIN_BASE === $plugin_file ) {
-			$plugin_slug = basename( MSSHEXT__FILE__, '.php' );
-			$plugin_name = MSSHEXT_NAME;
-		}
-
-		return $plugin_meta;
 	}
 
 	/**
 	 * Register cherry category for elementor if not exists
 	 *
 	 * @since v1.0.0
+	 * @param \Elementor\Elements_Manager $elements_manager
 	 * @return void
 	 */
 	public function register_element_categories( $elements_manager ) {
 		$elements_manager->add_category(
 			'msshext',
 			[
-				'title' => __( 'MŠ Škola Hrou', 'msshext' ),
+				'title' => esc_html__( 'MŠ Škola Hrou', 'msshext' ),
 				'icon' => 'font',
 			],
 			1

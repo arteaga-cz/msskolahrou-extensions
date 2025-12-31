@@ -1,8 +1,7 @@
 <?php
 namespace MSSHEXT\Elementor\Modules\Menus;
 
-use ElementorPro\Base\Module_Base;
-//use Elementor\Core\Base\Module as Module_Base;
+use MSSHEXT\Elementor\Base\Module_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly

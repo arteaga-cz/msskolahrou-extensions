@@ -35,7 +35,7 @@ class Module extends Module_Base {
 	public function localize_settings( $settings ) {
 		$settings = array_replace_recursive( $settings, [
 			'i18n' => [
-				'x_field' => __( '%s Field', 'elementor-pro' ),
+				'x_field' => __( '%s Field', 'msshext' ),
 			],
 		] );
 
@@ -118,16 +118,16 @@ class Module extends Module_Base {
 		parent::__construct();
 
 		add_filter( 'elementor_pro/editor/localize_settings', [ $this, 'localize_settings' ] );
-		//add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
-		//add_action( 'elementor/ajax/register_actions', [ $this, 'register_ajax_actions' ] );
+		
+		add_action( 'elementor_pro/forms/actions/register', [ $this, 'register_form_actions' ] );
+		add_action( 'elementor_pro/forms/fields/register', [ $this, 'register_form_fields' ] );
+	}
 
-		//fields
-		$this->add_form_field_type( 'dynamic_select', new Fields\Dynamic_Select() );
+	public function register_form_actions( $actions_manager ) {
+		$actions_manager->register_action( new Actions\Better_Redirect() );
+	}
 
-		//$this->add_component( 'recaptcha', new Classes\Recaptcha_Handler() );
-
-		// Plugins actions
-		//$this->add_form_action( 'redirect2', new Actions\Redirect2() ); //NOTE Does not work hence the approach below.
-		\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( 'better_redirect', new Actions\Better_Redirect() );
+	public function register_form_fields( $fields_manager ) {
+		$fields_manager->register_field( new Fields\Dynamic_Select() );
 	}
 }
