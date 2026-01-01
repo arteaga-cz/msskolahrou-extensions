@@ -6,9 +6,9 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Text_Shadow;
-use Elementor\Scheme_Color;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Icons_Manager;
-use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
@@ -622,9 +622,8 @@ class Events extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-event-wrapper' => 'background-color: {{VALUE}};',
@@ -716,9 +715,8 @@ class Events extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-timing' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -728,7 +726,9 @@ class Events extends Widget_Base {
 			[
 				'name' => 'date_typography',
 				'selector' => '{{WRAPPER}} .msshext-event-timing',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -762,9 +762,8 @@ class Events extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-title' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -774,7 +773,9 @@ class Events extends Widget_Base {
 			[
 				'name' => 'title_typography',
 				'selector' => '{{WRAPPER}} .msshext-event-title',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -808,9 +809,8 @@ class Events extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-desc .msshext-event-excerpt' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -820,7 +820,9 @@ class Events extends Widget_Base {
 			[
 				'name' => 'excerpt_typography',
 				'selector' => '{{WRAPPER}} .msshext-event-desc .msshext-event-excerpt',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_TEXT,
+				],
 			]
 		);
 
@@ -849,7 +851,9 @@ class Events extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'readmore_typography',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_ACCENT,
+				],
 				'selector' => '{{WRAPPER}} a.msshext-event-readmore, {{WRAPPER}} .msshext-event-readmore',
 			]
 		);
@@ -922,7 +926,9 @@ class Events extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'button_typography',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_ACCENT,
+				],
 				'selector' => '{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button',
 			]
 		);
@@ -961,9 +967,8 @@ class Events extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button' => 'background-color: {{VALUE}};',
@@ -1117,10 +1122,10 @@ class Events extends Widget_Base {
 
 		if ( !empty( $settings['timeframe'] ) && $settings['timeframe'] !== 'all' ) {
 			$args['meta_query']['date_start_clause']['value'] = date( 'Ymd' );
-			if ( $settings['timeframe'] == 'future' ) {
+			if ( $settings['timeframe'] === 'future' ) {
 				$args['meta_query']['date_start_clause']['compare'] = '>=';
 			}
-			if ( $settings['timeframe'] == 'past' ) {
+			if ( $settings['timeframe'] === 'past' ) {
 				$args['meta_query']['date_start_clause']['compare'] = '<';
 				$args['orderby']['date_start_clause'] = 'DESC';
 				$args['orderby']['time_start_clause'] = 'DESC';
@@ -1151,12 +1156,12 @@ class Events extends Widget_Base {
 		foreach ( $posts as $post ) {
 			setup_postdata( $post );
 
-			if ( $counter == $settings['items_to_show'] ) {
+			if ( $counter === $settings['items_to_show'] ) {
 				$show_button = true;
 				$this->render_loop_separator();
 			}
 
-			if ( !empty( $settings['month_tag'] ) && $settings['group_by_month'] == 'yes' ) {
+			if ( !empty( $settings['month_tag'] ) && $settings['group_by_month'] === 'yes' ) {
 				$new_month = date_i18n( 'F',  strtotime( get_field( 'mssh_event_date_start', $post->ID ) ) );
 				if ( $new_month !== $month ) {
 					$month = $new_month;

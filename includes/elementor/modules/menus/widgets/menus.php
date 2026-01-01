@@ -6,9 +6,9 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Text_Shadow;
-use Elementor\Scheme_Color;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Icons_Manager;
-use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
@@ -338,9 +338,8 @@ class Menus extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-item' => 'background-color: {{VALUE}};',
@@ -419,9 +418,8 @@ class Menus extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-date' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -431,7 +429,9 @@ class Menus extends Widget_Base {
 			[
 				'name' => 'date_typography',
 				'selector' => '{{WRAPPER}} .msshext-menu-date',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -466,9 +466,8 @@ class Menus extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-content-wrapper' => 'background-color: {{VALUE}};',
@@ -547,9 +546,8 @@ class Menus extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-type' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -559,7 +557,9 @@ class Menus extends Widget_Base {
 			[
 				'name' => 'food_title_typography',
 				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-type',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -593,9 +593,8 @@ class Menus extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-list' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -605,7 +604,9 @@ class Menus extends Widget_Base {
 			[
 				'name' => 'food_content_typography',
 				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-list',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -639,9 +640,8 @@ class Menus extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-allergens' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -651,7 +651,9 @@ class Menus extends Widget_Base {
 			[
 				'name' => 'food_allergens_typography',
 				'selector' => '{{WRAPPER}} .msshext-menu-content-wrapper .msshext-menu-food-allergens',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -686,9 +688,8 @@ class Menus extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-info-item' => 'background-color: {{VALUE}};',
@@ -723,9 +724,8 @@ class Menus extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-info-item .msshext-menu-date' => 'color: {{VALUE}};',
 				],
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_1,
+				'global' => [
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 			]
 		);
@@ -735,7 +735,9 @@ class Menus extends Widget_Base {
 			[
 				'name' => 'infocard_heading_typography',
 				'selector' => '{{WRAPPER}} .msshext-menu-info-item .msshext-menu-date',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'global' => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
@@ -744,9 +746,8 @@ class Menus extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+				'global' => [
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-menu-info-item .msshext-menu-content-wrapper' => 'background-color: {{VALUE}};',
@@ -803,7 +804,7 @@ class Menus extends Widget_Base {
 			$counter++;
 		}
 
-		if ( $settings['show_general_info'] == 'yes' )
+		if ( $settings['show_general_info'] === 'yes' )
 			$this->render_info_card();
 
 		if ( empty( $posts ) ) {

@@ -15,16 +15,16 @@ abstract class Module_Base extends Module {
 	}
 
 	public function __construct() {
-		add_action( 'elementor/widgets/widgets_registered', [ $this, 'init_widgets' ] );
+		add_action( 'elementor/widgets/register', [ $this, 'init_widgets' ] );
 	}
 
-	public function init_widgets() {
-		$widget_manager = Plugin::elementor()->widgets_manager;
+	public function init_widgets( $widgets_manager = null ) {
+		$widgets_manager = $widgets_manager ?? Plugin::elementor()->widgets_manager;
 
 		foreach ( $this->get_widgets() as $widget ) {
 			$class_name = $this->get_reflection()->getNamespaceName() . '\Widgets\\' . $widget;
 
-			$widget_manager->register_widget_type( new $class_name() );
+			$widgets_manager->register( new $class_name() );
 		}
 	}
 }

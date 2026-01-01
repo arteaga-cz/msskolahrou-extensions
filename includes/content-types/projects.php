@@ -84,7 +84,7 @@ function msshext_yoast_seo_breadcrumb_append_link_projects( $links ) {
 
 	foreach ( $links as $key => $val ) {
 
-		if ( $counter == $total_links - 1 ) {
+		if ( $counter === $total_links - 1 ) {
 
 			if ( !empty( $val['id'] ) ) {
 
@@ -130,7 +130,7 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 
 	foreach ( $links as $key => $val ) {
 
-		if ( $counter == $total_links - 1 ) {
+		if ( $counter === $total_links - 1 ) {
 
 			if ( !empty( $val['id'] ) ) {
 

@@ -112,7 +112,7 @@ function msshext_event_columns_orderby( $query ) {
 
 	$orderby = $query->get( 'orderby' );
 
-	if ( $orderby == 'datetime_start' ) {
+	if ( $orderby === 'datetime_start' ) {
 
 		$query->set( 'meta_query', array(
 			'relation' => 'AND',

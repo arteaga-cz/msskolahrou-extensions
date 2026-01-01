@@ -13,7 +13,7 @@ function msshext_check_event_date_and_id( $event_id, $event_date ) {
 	$dates = get_field( 'msshext_workshop_dates', $post->ID );
 
 	foreach ( $dates as $date ) {
-		if ( $date['msshext_workshop_date'] == $event_date )
+		if ( $date['msshext_workshop_date'] === $event_date )
 			return true;
 	}
 
@@ -48,20 +48,15 @@ function msshext_has_elementor( $post_id ) {
 }
 
 function msshext_get_acf_key( $field_name ) {
-
 	global $wpdb;
 
-	$length = strlen( $field_name );
+	$sql = $wpdb->prepare(
+		"SELECT post_name FROM {$wpdb->posts} WHERE post_type = %s AND post_excerpt = %s",
+		'acf-field',
+		$field_name
+	);
 
-	$sql = "
-			SELECT post_name
-			FROM {$wpdb->posts}
-			WHERE post_type='acf-field' AND post_excerpt='{$field_name}'
-			";
-
-	$result = $wpdb->get_var( $sql );
-
-	return $result;
+	return $wpdb->get_var( $sql );
 }
 
 /**

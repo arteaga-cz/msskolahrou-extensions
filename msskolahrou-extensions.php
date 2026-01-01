@@ -15,13 +15,15 @@
  * @wordpress-plugin
  * Plugin Name:       MŠ Škola hrou extensions
  * Description:       ms-skolahrou.cz extensions.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Miguel Arteaga
  * Author URI:        https://www.arteaga.cz
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       mswrk
+ * Text Domain:       mmshext
  * Domain Path:       /languages
+ * Requires at least: 6.0
+ * Requires PHP:      8.0
  */
 
 // If this file is called directly, abort.
@@ -34,7 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'MSSHEXT_VERSION', '1.0.0' );
+define( 'MSSHEXT_VERSION', '1.1.0' );
 
 define( 'MSSHEXT__FILE__', __FILE__ );
 define( 'MSSHEXT_PLUGIN_BASE', plugin_basename( MSSHEXT__FILE__ ) );
@@ -67,14 +69,14 @@ function msshext_elementor_load_plugin() {
 		return;
 	}
 
-	$elementor_version_required = '2.5.9';
+	$elementor_version_required = '3.5.0';
 	if ( ! version_compare( ELEMENTOR_VERSION, $elementor_version_required, '>=' ) ) {
 		add_action( 'admin_notices', 'msshext_elementor_fail_load_out_of_date' );
 
 		return;
 	}
 
-	$elementor_version_recommendation = '2.6.8';
+	$elementor_version_recommendation = '3.20.0';
 	if ( ! version_compare( ELEMENTOR_VERSION, $elementor_version_recommendation, '>=' ) ) {
 		add_action( 'admin_notices', 'msshext_elementor_admin_notice_upgrade_recommendation' );
 	}

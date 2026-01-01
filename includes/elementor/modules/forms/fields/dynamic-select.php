@@ -42,22 +42,22 @@ class Dynamic_Select extends Field_Base {
 
 		$data = '';
 
-		if ( $item['data_source'] == 'post_meta' ) {
+		if ( $item['data_source'] === 'post_meta' ) {
 			$data = get_post_meta( get_the_ID(), $item['data_key'], true );
 		}
 
-		if ( $item['data_source'] == 'option' ) {
+		if ( $item['data_source'] === 'option' ) {
 			$data = get_option( $item['data_key'] );
 		}
 
-		if ( $item['data_source'] == 'function' ) {
+		if ( $item['data_source'] === 'function' ) {
 			$data = call_user_func( $item['function_name'] );
 		}
 
-		if ( $item['data_source'] == 'acf_repeater_post' || $item['data_source'] == 'acf_repeater_options' ) {
+		if ( $item['data_source'] === 'acf_repeater_post' || $item['data_source'] === 'acf_repeater_options' ) {
 
 			$source = 'options';
-			if (  $item['data_source'] == 'acf_repeater_post' )
+			if ( $item['data_source'] === 'acf_repeater_post' )
 				$source = get_the_ID();
 
 			$options = [];

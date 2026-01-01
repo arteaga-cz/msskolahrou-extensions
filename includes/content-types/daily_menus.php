@@ -90,7 +90,7 @@ function msshext_daily_menu_columns_orderby( $query ) {
 
 	$orderby = $query->get( 'orderby' );
 
-	if ( $orderby == 'title' || empty( $orderby ) ) {
+	if ( $orderby === 'title' || empty( $orderby ) ) {
 
 		$query->set( 'meta_query', array(
 			//'relation' => 'AND',
@@ -127,10 +127,19 @@ function msshext_daily_menu_update_title( $data ) {
 add_action( 'save_post', 'set_rating_title', 12 );
 function set_rating_title( $post_id ) {
 
-	if ( $post_id == null || empty( $_POST ) )
+	if ( $post_id === null || empty( $_POST ) )
 		return;
 
-	if ( !isset( $_POST['post_type'] ) || $_POST['post_type'] != 'msshext_daily_menu' )
+	// Verify nonce for ACF save
+	if ( ! isset( $_POST['acf_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['acf_nonce'] ) ), 'acf_nonce' ) ) {
+		// ACF handles its own nonce, but we still check post type
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+	}
+
+	$post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) : '';
+	if ( $post_type !== 'msshext_daily_menu' )
 		return;
 
 	if ( wp_is_post_revision( $post_id ) )
@@ -142,9 +151,16 @@ function set_rating_title( $post_id ) {
 		$post = get_post( $post_id );
 
 	$date_key = msshext_get_acf_key( 'msshext_daily_menu_date' );
-	$date = date_i18n( 'l j. n.', strtotime( $_POST['acf'][$date_key] ) );
 
-	if ( $_POST['acf'][$date_key] != '' ) {
+	// Check if ACF data exists and has the date key
+	if ( ! isset( $_POST['acf'] ) || ! is_array( $_POST['acf'] ) || ! isset( $_POST['acf'][ $date_key ] ) ) {
+		return;
+	}
+
+	$acf_date = sanitize_text_field( wp_unslash( $_POST['acf'][ $date_key ] ) );
+
+	if ( $acf_date !== '' ) {
+		$date = date_i18n( 'l j. n.', strtotime( $acf_date ) );
 		global $wpdb;
 		$where = array( 'ID' => $post_id );
 		$wpdb->update( $wpdb->posts, array( 'post_title' => $date ), $where );
@@ -217,7 +233,7 @@ function msshext_daily_menu_download() {
 	if ( !function_exists('get_field') )
 		return;
 
-	if ( empty( $_GET['msshext_action'] ) || $_GET['msshext_action'] != 'download_menu' )
+	if ( empty( $_GET['msshext_action'] ) || $_GET['msshext_action'] !== 'download_menu' )
 		return;
 
 	if ( !isset( $_GET['week'] ) )
@@ -232,7 +248,7 @@ function msshext_daily_menu_download() {
 
 	$menu_counter = 0;
 	foreach ( $menus as $menu ) {
-		if ( $menu_counter == 0 )
+		if ( $menu_counter === 0 )
 			$start_date = $menu['date_raw'];
 
 		$end_date = $menu['date_raw'];

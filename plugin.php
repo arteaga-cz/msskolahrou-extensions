@@ -113,7 +113,7 @@ class Plugin {
 				)
 			);
 
-			if ( DIRECTORY_SEPARATOR == '/' ) {
+			if ( DIRECTORY_SEPARATOR === '/' ) {
 				$filename = str_replace( 'msshext/', '', $filename );
 			} else {
 				$filename = str_replace( 'msshext\\', '', $filename );

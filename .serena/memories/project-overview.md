@@ -2,7 +2,10 @@
 
 ## Plugin Information
 - **Name**: MS Škola Hrou Extensions
-- **Version**: Defined in `MSSHEXT_VERSION` constant
+- **Version**: 1.1.0 (Defined in `MSSHEXT_VERSION` constant)
+- **PHP Requirement**: 8.0+ (supports up to 8.4)
+- **WordPress Requirement**: 6.0+
+- **Elementor Requirement**: 3.5+
 - **Namespace**: `MSSHEXT`
 - **Main file**: `msskolahrou-extensions.php` (bootstrap), `plugin.php` (core Plugin class)
 - **Language**: PHP (WordPress plugin with Elementor integration)
