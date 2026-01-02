@@ -11,9 +11,6 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Icons_Manager;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
-use Elementor\Controls_Stack;
-//use ElementorPro\Modules\QueryControl\Module as Module_Query;
-//use ElementorPro\Modules\QueryControl\Controls\Group_Control_Related;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -25,11 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Events extends Widget_Base {
 
 	/**
-	 * @var \WP_Query
-	 */
-	private $_query = null;
-
-	/**
 	 * Retrieve the widget name.
 	 *
 	 * @since 1.0.0
@@ -38,7 +30,7 @@ class Events extends Widget_Base {
 	 *
 	 * @return string Widget name.
 	 */
-	public function get_name() {
+	public function get_name(): string {
 		return 'msshext-events';
 	}
 
@@ -51,7 +43,7 @@ class Events extends Widget_Base {
 	 *
 	 * @return string Widget title.
 	 */
-	public function get_title() {
+	public function get_title(): string {
 		return __( 'MŠ Události', 'msshext' );
 	}
 
@@ -64,7 +56,7 @@ class Events extends Widget_Base {
 	 *
 	 * @return string Widget icon.
 	 */
-	public function get_icon() {
+	public function get_icon(): string {
 		return 'eicon-post-list';
 	}
 
@@ -78,7 +70,7 @@ class Events extends Widget_Base {
 	 *
 	 * @return array Widget keywords.
 	 */
-	public function get_keywords() {
+	public function get_keywords(): array {
 		return [ 'loop', 'posts', 'list' ];
 	}
 
@@ -96,11 +88,11 @@ class Events extends Widget_Base {
 	 *
 	 * @return array Widget categories.
 	 */
-	public function get_categories() {
+	public function get_categories(): array {
 		return [ 'msshext' ];
 	}
 
-	protected function get_terms() {
+	protected function get_terms(): array {
 		$terms = get_terms( [
 			'taxonomy' => 'category',
 			'hide_empty' => false,
@@ -123,7 +115,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function _register_controls() {
+	protected function register_controls(): void {
 
 		/**
 		 * Content - EVENTS
@@ -151,7 +143,7 @@ class Events extends Widget_Base {
 			'items_to_show',
 			[
 				'label' => esc_html__( 'Items to show', 'msshext' ),
-				'type' => Controls_Manager::TEXT,
+				'type' => Controls_Manager::NUMBER,
 				'label_block' => false,
 				'default' => 2,
 			]
@@ -228,21 +220,6 @@ class Events extends Widget_Base {
 				'type' => Controls_Manager::NUMBER,
 				'min' => 2,
 				'max' => 100,
-				'required' => true,
-				'device_args' => [
-					Controls_Stack::RESPONSIVE_TABLET => [
-						'max' => 100,
-						'required' => false,
-					],
-					Controls_Stack::RESPONSIVE_MOBILE => [
-						'max' => 100,
-						'required' => false,
-					],
-				],
-				'min_affected_device' => [
-					Controls_Stack::RESPONSIVE_DESKTOP => Controls_Stack::RESPONSIVE_TABLET,
-					Controls_Stack::RESPONSIVE_TABLET => Controls_Stack::RESPONSIVE_TABLET,
-				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-timing' => 'width: {{VALUE}}%',
 				],
@@ -256,21 +233,6 @@ class Events extends Widget_Base {
 				'type' => Controls_Manager::NUMBER,
 				'min' => 2,
 				'max' => 100,
-				'required' => true,
-				'device_args' => [
-					Controls_Stack::RESPONSIVE_TABLET => [
-						'max' => 100,
-						'required' => false,
-					],
-					Controls_Stack::RESPONSIVE_MOBILE => [
-						'max' => 100,
-						'required' => false,
-					],
-				],
-				'min_affected_device' => [
-					Controls_Stack::RESPONSIVE_DESKTOP => Controls_Stack::RESPONSIVE_TABLET,
-					Controls_Stack::RESPONSIVE_TABLET => Controls_Stack::RESPONSIVE_TABLET,
-				],
 				'selectors' => [
 					'{{WRAPPER}} .msshext-event-desc' => 'width: {{VALUE}}%',
 				],
@@ -309,7 +271,7 @@ class Events extends Widget_Base {
 					'span' => 'span',
 					'p' => 'p',
 				],
-				'default' => 'h ',
+				'default' => 'h3',
 				'condition' => [
 					'group_by_month' => 'yes',
 				],
@@ -328,7 +290,7 @@ class Events extends Widget_Base {
 			[
 				'label' => __( 'Read More link text', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'Více informací'),
+				'default' => __( 'Více informací', 'msshext' ),
 			]
 		);
 
@@ -385,7 +347,7 @@ class Events extends Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label' => __( 'Category' ),
+				'label' => __( 'Category', 'msshext' ),
 				'type' => Controls_Manager::SELECT2,
 				'label_block' => true,
 				'default' => [],
@@ -437,7 +399,7 @@ class Events extends Widget_Base {
 			[
 				'label' => __( 'No posts found message', 'msshext' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'Zatím žádné události.'),
+				'default' => __( 'Zatím žádné události.', 'msshext' ),
 			]
 		);
 
@@ -1079,22 +1041,7 @@ class Events extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	public function get_query() {
-		return $this->_query;
-	}
-
-	public function query_posts() {
-
-		$query_args = [
-			'posts_per_page' => $this->get_settings( 'posts_per_page' ),
-		];
-
-		/** @var Module_Query $elementor_query */
-		$elementor_query = Module_Query::instance();
-		$this->_query = $elementor_query->get_query( $this, 'list', $query_args, [] );
-	}
-
-	public function render() {
+	public function render(): void {
 
 		global $post;
 		//$this->query_posts();
@@ -1156,7 +1103,7 @@ class Events extends Widget_Base {
 		foreach ( $posts as $post ) {
 			setup_postdata( $post );
 
-			if ( $counter === $settings['items_to_show'] ) {
+			if ( $counter === (int) $settings['items_to_show'] ) {
 				$show_button = true;
 				$this->render_loop_separator();
 			}
@@ -1182,12 +1129,12 @@ class Events extends Widget_Base {
 		wp_reset_postdata();
 	}
 
-	protected function render_month( $text ) {
-
+	protected function render_month( string $text ): void {
 		$settings = $this->get_settings_for_display();
+		$allowed_tags = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' ];
+		$tag = in_array( $settings['month_tag'], $allowed_tags, true ) ? $settings['month_tag'] : 'h3';
 
-		echo sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['month_tag'], $this->get_render_attribute_string( 'month_text' ), $text );
-
+		printf( '<%1$s %2$s>%3$s</%1$s>', $tag, $this->get_render_attribute_string( 'month_text' ), esc_html( $text ) );
 	}
 
 	/**
@@ -1198,7 +1145,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render_post() {
+	protected function render_post(): void {
 
 		$settings = $this->get_settings_for_display();
 
@@ -1227,7 +1174,10 @@ class Events extends Widget_Base {
 
 		$html.= '<div class="msshext-event-desc msshext-column">' . PHP_EOL;
 
-		$html.= sprintf( '<%1$s %2$s>%3$s</%1$s>', $settings['title_tag'], $this->get_render_attribute_string( 'title_text' ), get_the_title() );
+		$allowed_tags = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' ];
+		$title_tag = in_array( $settings['title_tag'], $allowed_tags, true ) ? $settings['title_tag'] : 'h3';
+
+		$html .= sprintf( '<%1$s %2$s>%3$s</%1$s>', $title_tag, $this->get_render_attribute_string( 'title_text' ), esc_html( get_the_title() ) );
 
 		$html.= sprintf( '<p %s>%s</p>', $this->get_render_attribute_string( 'excerpt' ), get_the_excerpt() );
 
@@ -1242,14 +1192,14 @@ class Events extends Widget_Base {
 		echo $html;
 	}
 
-	protected function render_loop_header() {
+	protected function render_loop_header(): void {
 		?>
 		<div class="elementor-events elementor-grid elementor-posts-container elementor-visible-container msshext-events">
 			<div class="msshext-events-visible">
 		<?php
 	}
 
-	protected function render_loop_footer( $show_button = false ) {
+	protected function render_loop_footer( bool $show_button = false ): void {
 		?>
 			</div>
 			<?php if ( $show_button ) : ?>
@@ -1259,17 +1209,17 @@ class Events extends Widget_Base {
 		<?php
 	}
 
-	protected function render_loop_separator() {
+	protected function render_loop_separator(): void {
 		?>
 			</div>
 			<div class="msshext-events-hidden">
 		<?php
 	}
 
-	protected function render_no_posts_message() {
+	protected function render_no_posts_message(): void {
 		$settings = $this->get_settings_for_display();
 		$this->add_render_attribute( 'no_posts_message', 'class', 'msshext-no-posts-message' );
-		echo sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), $settings['no_posts_message'] );
+		echo sprintf( '<span %s>%s</span>', $this->get_render_attribute_string( 'no_posts_message' ), esc_html( $settings['no_posts_message'] ) );
 	}
 
 	/**
@@ -1301,7 +1251,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render_button() {
+	protected function render_button(): void {
 		$settings = $this->get_settings_for_display();
 
 		$this->add_render_attribute( 'button_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
@@ -1352,7 +1302,7 @@ class Events extends Widget_Base {
 	 * @since 1.5.0
 	 * @access protected
 	 */
-	protected function render_button_text() {
+	protected function render_button_text(): void {
 		$settings = $this->get_settings_for_display();
 
 		$migrated = isset( $settings['__fa4_migrated']['button_selected_icon'] );
@@ -1392,7 +1342,7 @@ class Events extends Widget_Base {
 						<?php endif; ?>
 					</span>
 					<?php endif; ?>
-					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['button_text']; ?></span>
+					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo esc_html( $settings['button_text'] ); ?></span>
 				</span>
 				<?php
 	}
@@ -1405,7 +1355,7 @@ class Events extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function get_readmore( $href = '#', $label = '' ) {
+	protected function get_readmore( string $href = '#', string $label = '' ): string {
 		$settings = $this->get_settings_for_display();
 
 		$this->add_render_attribute( 'readmore_wrapper', 'class', 'elementor-button-wrapper elementor-align-' . $settings['button_align'] );
@@ -1423,7 +1373,7 @@ class Events extends Widget_Base {
 
 				?>
 				<div <?php echo $this->get_render_attribute_string( 'readmore_wrapper' ); ?>>
-					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?> aria-label="<?php echo $settings['readmore_text'] . ' - ' . $label; ?>">
+					<a <?php echo $this->get_render_attribute_string( 'readmore' ); ?> aria-label="<?php echo esc_attr( $settings['readmore_text'] . ' - ' . $label ); ?>">
 						<?php $this->render_readmore_text(); ?>
 					</a>
 				</div>
@@ -1438,7 +1388,7 @@ class Events extends Widget_Base {
 	 * @since 1.5.0
 	 * @access protected
 	 */
-	protected function render_readmore_text() {
+	protected function render_readmore_text(): void {
 		$settings = $this->get_settings_for_display();
 
 		$migrated = isset( $settings['__fa4_migrated']['readmore_selected_icon'] );
@@ -1478,55 +1428,9 @@ class Events extends Widget_Base {
 						<?php endif; ?>
 					</span>
 					<?php endif; ?>
-					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo $settings['readmore_text']; ?></span>
+					<span <?php echo $this->get_render_attribute_string( 'text' ); ?>><?php echo esc_html( $settings['readmore_text'] ); ?></span>
 				</span>
 				<?php
-	}
-
-	/**
-	 * Render image box widget output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function _content_template2() {
-?>
-<#
-   var html = '<div class="elementor-event-wrapper msshext-advanced-event-wrapper">';
-
-   var hasContent = !! ( settings.title_text || settings.description_text );
-
-   if ( hasContent ) {
-   html += '<div class="elementor-event-content msshext-advanced-event-content">';
-
-   if ( settings.title_text ) {
-   var title_html = settings.title_text;
-
-   view.addRenderAttribute( 'title_text', 'class', 'elementor-event-title msshext-advanced-event-title' );
-
-   view.addInlineEditingAttributes( 'title_text', 'none' );
-
-   html += '<' + settings.title_tag  + ' ' + view.getRenderAttributeString( 'title_text' ) + '>' + title_html + '</' + settings.title_tag  + '>';
-   }
-
-   if ( settings.description_text ) {
-   view.addRenderAttribute( 'description_text', 'class', 'elementor-event-description msshext-advanced-event-description' );
-
-   view.addInlineEditingAttributes( 'description_text' );
-
-   html += '<p ' + view.getRenderAttributeString( 'description_text' ) + '>' + settings.description_text + '</p>';
-   }
-
-   html += '</div>';
-   }
-
-   html += '</div>';
-
-   print( html );
-   #>
-	<?php
 	}
 
 }

@@ -3,7 +3,17 @@
     "allow": [
       "Bash(composer update:*)",
       "Bash(composer show:*)",
-      "mcp__context7__query-docs"
+      "mcp__context7__query-docs",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__resize_page",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(npm run build:zip:*)",
+      "Bash(unzip:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:developers.elementor.com)",
+      "mcp__chrome-devtools__list_pages"
     ]
   }
 }
