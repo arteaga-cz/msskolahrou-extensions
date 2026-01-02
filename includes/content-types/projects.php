@@ -74,7 +74,7 @@ function msshext_project_options() {
  */
 add_filter( 'wpseo_breadcrumb_links', 'msshext_yoast_seo_breadcrumb_append_link_projects' );
 function msshext_yoast_seo_breadcrumb_append_link_projects( $links ) {
-
+	
 	if ( !is_singular( 'msshext_project' ) )
 		return $links;
 
@@ -92,12 +92,20 @@ function msshext_yoast_seo_breadcrumb_append_link_projects( $links ) {
 				$archive_page = get_post( $archive_page_id );
 				$current_post = $archive_page;
 				$tmp_links = array();
-				$tmp_links[] = array( 'id' => $current_post->ID );
+				$tmp_links[] = array(
+					'url' => get_permalink( $current_post->ID ),
+					'text' => $current_post->post_title,
+					'id' => $current_post->ID
+				);
 
 				do {
 					if ( !empty( $current_post->post_parent ) ) {
 						$current_post = get_post( $current_post->post_parent );
-						$tmp_links[] = array( 'id' => $current_post->ID );
+						$tmp_links[] = array(
+							'url' => get_permalink( $current_post->ID ),
+							'text' => $current_post->post_title,
+							'id' => $current_post->ID
+						);
 					}
 				} while ( !empty( $current_post->post_parent > 0 ) );
 
@@ -138,7 +146,11 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 				$archive_page = get_post( $archive_page_id );
 				$current_post = $archive_page;
 				$tmp_links = array();
-				$tmp_links[] = array( 'id' => $current_post->ID );
+				$tmp_links[] = array(
+					'url' => get_permalink( $current_post->ID ),
+					'text' => $current_post->post_title,
+					'id' => $current_post->ID
+				);
 
 				/**
 				 * Add breadcrumbs for classes dashboard page and it's parents.
@@ -146,7 +158,11 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 				do {
 					if ( !empty( $current_post->post_parent ) ) {
 						$current_post = get_post( $current_post->post_parent );
-						$tmp_links[] = array( 'id' => $current_post->ID );
+						$tmp_links[] = array(
+							'url' => get_permalink( $current_post->ID ),
+							'text' => $current_post->post_title,
+							'id' => $current_post->ID
+						);
 					}
 				} while ( !empty( $current_post->post_parent > 0 ) );
 
@@ -185,7 +201,11 @@ function msshext_yoast_seo_breadcrumb_append_link_event( $links ) {
 				);
 
 				if ( !empty( $class_pages[0] ) ) {
-					$new_links[] = array( 'id' => $class_pages[0]->ID );
+					$new_links[] = array(
+						'url' => get_permalink( $class_pages[0]->ID ),
+						'text' => $class_pages[0]->post_title,
+						'id' => $class_pages[0]->ID
+					);
 				}
 			}
 		}
