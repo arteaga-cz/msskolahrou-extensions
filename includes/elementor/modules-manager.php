@@ -20,6 +20,7 @@ final class Modules_Manager {
 			//'forms',
 			'events',
 			'menus',
+			'timeline',
 			//'filterable-gallery',
 		];
 

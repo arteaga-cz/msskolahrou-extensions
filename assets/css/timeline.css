@@ -1,0 +1,417 @@
+/**
+ * Visual Timeline Widget Styles
+ *
+ * @package MSSHEXT
+ */
+
+/* ==========================================================================
+   CSS Custom Properties
+   ========================================================================== */
+
+.msshext-timeline {
+	/* Progress & Arrow */
+	--timeline-progress: 0;
+	--arrow-size: 12px;
+
+	/* Layout Spacing */
+	--marker-offset: 60px;
+	--card-gap: 35px;
+	--line-position: 22px;
+
+	/* Container */
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+/* ==========================================================================
+   Timeline Container
+   ========================================================================== */
+
+.msshext-timeline-items {
+	position: relative;
+	z-index: 1;
+}
+
+.msshext-timeline-item {
+	display: flex;
+	align-items: flex-start;
+	position: relative;
+}
+
+.msshext-timeline-item:last-child {
+	margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Timeline Line
+   ========================================================================== */
+
+.msshext-timeline-line {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	z-index: 0;
+}
+
+.msshext-timeline-line-progress {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: calc(var(--timeline-progress) * 100%);
+	transition: height 0.1s linear;
+}
+
+/* Line Styles */
+.msshext-timeline-line--dashed {
+	background: repeating-linear-gradient(
+		to bottom,
+		currentColor 0,
+		currentColor 8px,
+		transparent 8px,
+		transparent 16px
+	);
+}
+
+.msshext-timeline-line--dotted {
+	background: repeating-linear-gradient(
+		to bottom,
+		currentColor 0,
+		currentColor 4px,
+		transparent 4px,
+		transparent 12px
+	);
+}
+
+/* ==========================================================================
+   Layout: Alternate (Default)
+   ========================================================================== */
+
+.msshext-timeline--alternate {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.msshext-timeline--alternate .msshext-timeline-line {
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.msshext-timeline--alternate .msshext-timeline-item {
+	width: 100%;
+	justify-content: flex-end;
+}
+
+/* Card on left side */
+.msshext-timeline--alternate .msshext-timeline-item--left {
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-card-wrapper {
+	width: calc(50% - var(--card-gap));
+	margin-right: auto;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-label {
+	position: absolute;
+	left: 100%;
+	text-align: left;
+}
+
+/* Card on right side */
+.msshext-timeline--alternate .msshext-timeline-item--right {
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-card-wrapper {
+	width: calc(50% - var(--card-gap));
+	margin-left: auto;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-label {
+	position: absolute;
+	right: 100%;
+	text-align: right;
+}
+
+/* Shared marker positioning for alternate layout */
+.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-marker,
+.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-marker {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-marker {
+	flex-direction: row;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-marker {
+	flex-direction: row-reverse;
+}
+
+/* Arrow positioning for alternate layout */
+.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-card-wrapper::before {
+	right: calc(-1 * var(--arrow-size));
+	left: auto;
+	border-right-width: 0 !important;
+}
+
+.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-card-wrapper::before {
+	left: calc(-1 * var(--arrow-size));
+	right: auto;
+	border-left-width: 0 !important;
+}
+
+/* ==========================================================================
+   Layout: Left-aligned
+   ========================================================================== */
+
+.msshext-timeline--left {
+	padding-left: var(--marker-offset);
+}
+
+.msshext-timeline--left .msshext-timeline-line {
+	left: var(--line-position);
+}
+
+.msshext-timeline--left .msshext-timeline-item {
+	flex-direction: row;
+}
+
+.msshext-timeline--left .msshext-timeline-marker {
+	position: absolute;
+	left: calc(-1 * var(--marker-offset));
+	top: 50%;
+	transform: translateY(-50%);
+	flex-direction: column;
+	align-items: center;
+}
+
+.msshext-timeline--left .msshext-timeline-label {
+	margin-top: 8px;
+	text-align: center;
+}
+
+.msshext-timeline--left .msshext-timeline-card-wrapper {
+	width: 100%;
+}
+
+.msshext-timeline--left .msshext-timeline-card-wrapper::before {
+	left: calc(-1 * var(--arrow-size));
+	border-right-width: 0 !important;
+}
+
+/* ==========================================================================
+   Marker (Icon + Label)
+   ========================================================================== */
+
+.msshext-timeline-marker {
+	display: flex;
+	align-items: center;
+	z-index: 2;
+}
+
+.msshext-timeline-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	flex-shrink: 0;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.msshext-timeline-icon i,
+.msshext-timeline-icon svg {
+	display: block;
+	line-height: 1;
+}
+
+.msshext-timeline-label {
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+/* Mobile label (inside card) - hidden on desktop */
+.msshext-timeline-label--mobile {
+	display: none;
+}
+
+/* ==========================================================================
+   Card Wrapper & Arrow
+   ========================================================================== */
+
+.msshext-timeline-card-wrapper {
+	position: relative;
+}
+
+/* Arrow created with CSS border trick on ::before pseudo-element */
+.msshext-timeline-card-wrapper::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-color: transparent;
+}
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.msshext-timeline-card {
+	overflow: hidden;
+}
+
+/* ==========================================================================
+   Image
+   ========================================================================== */
+
+.msshext-timeline-image {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+.msshext-timeline-image--16-9 {
+	padding-bottom: 56.25%;
+}
+
+.msshext-timeline-image--4-3 {
+	padding-bottom: 75%;
+}
+
+.msshext-timeline-image--1-1 {
+	padding-bottom: 100%;
+}
+
+.msshext-timeline-image--original {
+	padding-bottom: 0;
+}
+
+.msshext-timeline-image-el {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.msshext-timeline-image--original .msshext-timeline-image-el {
+	position: relative;
+	width: 100%;
+	height: auto;
+}
+
+/* ==========================================================================
+   Title & Description
+   ========================================================================== */
+
+.msshext-timeline-title {
+	margin: 0 0 0.5em;
+}
+
+.msshext-timeline-description {
+	margin: 0;
+}
+
+.msshext-timeline-description p:last-child {
+	margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.msshext-timeline-empty {
+	padding: 40px 20px;
+	text-align: center;
+	background-color: #f5f5f5;
+	border: 2px dashed #ddd;
+	border-radius: 8px;
+	color: #666;
+	font-size: 14px;
+}
+
+/* ==========================================================================
+   Mobile Responsive (Collapse to single column)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+	.msshext-timeline {
+		--marker-offset: 55px;
+	}
+
+	/* Force left-aligned layout on mobile */
+	.msshext-timeline--alternate {
+		padding-left: var(--marker-offset);
+		padding-right: 0;
+	}
+
+	.msshext-timeline--alternate .msshext-timeline-line {
+		left: var(--line-position);
+		transform: none;
+	}
+
+	.msshext-timeline--alternate .msshext-timeline-item,
+	.msshext-timeline--alternate .msshext-timeline-item--left,
+	.msshext-timeline--alternate .msshext-timeline-item--right {
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+
+	.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-card-wrapper,
+	.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-card-wrapper {
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-marker,
+	.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-marker {
+		position: absolute;
+		left: calc(-1 * var(--marker-offset));
+		top: 50%;
+		transform: translateY(-50%);
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-label,
+	.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-label {
+		position: static;
+		margin-top: 8px;
+		margin-left: 0;
+		margin-right: 0;
+		text-align: left;
+	}
+
+	/* Arrow: all items point right toward icon on mobile */
+	.msshext-timeline--alternate .msshext-timeline-item--left .msshext-timeline-card-wrapper::before,
+	.msshext-timeline--alternate .msshext-timeline-item--right .msshext-timeline-card-wrapper::before {
+		left: calc(-1 * var(--arrow-size));
+		right: auto;
+		border-left-width: var(--arrow-size) !important;
+		border-right-width: 0 !important;
+		transform: translateY(-50%) scaleX(-1);
+	}
+
+	/* Show mobile label, hide marker label */
+	.msshext-timeline-label--mobile {
+		display: block;
+		margin-bottom: 0.5em;
+		margin: 0 !important;
+		white-space: normal;
+	}
+
+	.msshext-timeline-marker .msshext-timeline-label {
+		display: none;
+	}
+}

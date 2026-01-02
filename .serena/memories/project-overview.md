@@ -2,7 +2,7 @@
 
 ## Plugin Information
 - **Name**: MS Škola Hrou Extensions
-- **Version**: 1.1.0 (Defined in `MSSHEXT_VERSION` constant)
+- **Version**: 1.2.6 (Defined in `MSSHEXT_VERSION` constant)
 - **PHP Requirement**: 8.0+ (supports up to 8.4)
 - **WordPress Requirement**: 6.0+
 - **Elementor Requirement**: 3.5+
@@ -163,6 +163,21 @@ msskolahrou-extensions/
   - `includes/elementor/modules/menus/module.php`
   - `includes/elementor/modules/menus/widgets/menus.php`
 - **Widget**: `Menus` - Displays daily menu listings
+
+### Timeline Module
+- **Namespace**: `MSSHEXT\\Elementor\\Modules\\Timeline`
+- **Files**:
+  - `includes/elementor/modules/timeline/module.php`
+  - `includes/elementor/modules/timeline/widgets/timeline.php`
+  - `assets/css/timeline.css`
+  - `assets/js/timeline.js`
+- **Widget**: `Visual Timeline` - Displays vertical timeline with alternating cards
+- **Features**:
+  - Alternate and left-aligned layout modes
+  - Scroll progress animation with icon state changes
+  - Repeater with Image, Title, Description (WYSIWYG), Icon, Label
+  - Mobile responsive (collapses to single column)
+  - Dynamic line positioning (first to last icon centers)
 
 ### Forms Module
 - **Namespace**: `MSSHEXT\Elementor\Modules\Forms`

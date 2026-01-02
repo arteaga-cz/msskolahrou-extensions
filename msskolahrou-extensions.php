@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       MŠ Škola hrou extensions
  * Description:       ms-skolahrou.cz extensions.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            Miguel Arteaga
  * Author URI:        https://www.arteaga.cz
  * License:           GPL-2.0+
@@ -36,7 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'MSSHEXT_VERSION', '1.1.0' );
+define( 'MSSHEXT_VERSION', '1.2.0' );
 
 define( 'MSSHEXT__FILE__', __FILE__ );
 define( 'MSSHEXT_PLUGIN_BASE', plugin_basename( MSSHEXT__FILE__ ) );

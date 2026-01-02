@@ -173,6 +173,26 @@ class Plugin {
 			true
 		);*/
 
+		// Timeline widget scripts
+		wp_register_script(
+			'msshext-timeline',
+			MSSHEXT_URL . 'assets/js/timeline.js',
+			[
+				'jquery',
+				'elementor-frontend',
+			],
+			MSSHEXT_VERSION,
+			true
+		);
+
+		// Timeline widget styles
+		wp_register_style(
+			'msshext-timeline',
+			MSSHEXT_URL . 'assets/css/timeline.css',
+			[],
+			MSSHEXT_VERSION
+		);
+
 	}
 
 	public function on_elementor_init() {
