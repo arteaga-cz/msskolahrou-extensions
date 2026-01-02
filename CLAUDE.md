@@ -15,11 +15,31 @@ WordPress plugin extending functionality for MS Škola Hrou (kindergarten websit
 composer install
 npm install
 
-# Build distribution zip
-grunt
+# Build CSS from SCSS (outputs to assets/css/)
+npm run build:css
+
+# Watch SCSS for changes during development
+npm run watch:css
+
+# Build distribution ZIP
+npm run build:zip
+
+# Full build (CSS + ZIP)
+npm run build
 
 # PHP syntax check (run from plugin directory)
 cmd.exe /c "php -l includes/*.php"
+```
+
+## Source Structure
+
+```
+src/scss/           # SCSS source files
+  ├── frontend.scss # Frontend widget styles
+  ├── timeline.scss # Visual Timeline widget styles
+  └── admin.scss    # Admin styles
+
+assets/css/         # Compiled CSS output (generated)
 ```
 
 ## Commit Messages

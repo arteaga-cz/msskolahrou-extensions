@@ -1,15 +1,15 @@
 {
-	"name": "MSSHEXT",
-	"version": "1.0.0",
-	"devDependencies": {
-		"grunt": "^1.0.3",
-		"grunt-contrib-compress": "^1.4.3",
-		"grunt-contrib-concat": "^1.0.1",
-		"grunt-contrib-copy": "^1.0.0",
-		"grunt-contrib-cssmin": "^3.0.0",
-		"grunt-contrib-jshint": "^2.1.0",
-		"grunt-contrib-sass": "^1.0.0",
-		"grunt-contrib-uglify": "^4.0.1"
+	"name": "msskolahrou-extensions",
+	"version": "1.2.0",
+	"type": "module",
+	"scripts": {
+		"build:css": "sass src/scss:assets/css --style=compressed --source-map",
+		"watch:css": "sass src/scss:assets/css --watch --source-map",
+		"build:zip": "node scripts/build-zip.js",
+		"build": "npm run build:css && npm run build:zip"
 	},
-	"dependencies": {}
+	"devDependencies": {
+		"archiver": "^7.0.0",
+		"sass": "^1.77.0"
+	}
 }

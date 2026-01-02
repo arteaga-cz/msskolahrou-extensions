@@ -30,6 +30,11 @@ public/system/lib/
 msskolahrou-extensions.zip
 dist/
 
+# Generated CSS (source is src/scss/)
+assets/css/*.css
+assets/css/*.css.map
+*.backup.css
+
 # Logs and databases
 *.log
 *.sql
