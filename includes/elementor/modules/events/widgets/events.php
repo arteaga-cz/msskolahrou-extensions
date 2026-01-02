@@ -132,7 +132,7 @@ class Events extends Widget_Base {
 			'posts_per_page',
 			[
 				'label' => esc_html__( 'Items to load', 'msshext' ),
-				'type' => Controls_Manager::TEXT,
+				'type' => Controls_Manager::NUMBER,
 				'label_block' => false,
 				'default' => -1,
 			]
