@@ -22,6 +22,8 @@ final class Modules_Manager {
 			'menus',
 			'timeline',
 			//'filterable-gallery',
+			// Modules without Widgets.
+			'dynamic-tags',
 		];
 
 		foreach ( $modules as $module_name ) {
