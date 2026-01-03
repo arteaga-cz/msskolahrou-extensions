@@ -36,7 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'MSSHEXT_VERSION', '1.2.0' );
+define( 'MSSHEXT_VERSION', '1.3.0' );
 
 define( 'MSSHEXT__FILE__', __FILE__ );
 define( 'MSSHEXT_PLUGIN_BASE', plugin_basename( MSSHEXT__FILE__ ) );
