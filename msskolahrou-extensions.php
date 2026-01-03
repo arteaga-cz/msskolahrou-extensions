@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       MŠ Škola hrou extensions
  * Description:       ms-skolahrou.cz extensions.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            Miguel Arteaga
  * Author URI:        https://www.arteaga.cz
  * License:           GPL-2.0+
